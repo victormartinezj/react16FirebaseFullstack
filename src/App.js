@@ -8,16 +8,42 @@ function App() {
 
 	useEffect(() => {
 		if (enviando) {
+			// actualizar
 			db.collection('posts')
-				.add({ titulo })
-				.then((docRef) => {
+				.doc('RGWnwhN0RlpHymP7RAXx')
+				.set({ cuerpo: titulo }, { merge: true })
+				.then(() => {
 					setEnviando(false);
-					console.log(`el id es: ${docRef.id}`);
+					console.log(`el id es establecido`);
 				})
 				.catch((e) => {
 					setEnviando(false);
 					console.log(`error: ${e}`);
 				});
+
+			// establcer id, cambiar todos datos de un documento
+			// db.collection('posts')
+			// 	.doc('miId')
+			// 	.set({ cuerpo: titulo })
+			// 	.then(() => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es establecido`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
+			// agregar datos con id autogenerado
+			// db.collection('posts')
+			// 	.add({ titulo })
+			// 	.then((docRef) => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es: ${docRef.id}`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
 		}
 	}, [enviando]);
 
