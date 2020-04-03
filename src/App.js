@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { db } from './firebase';
+import Lista from './Lista';
 
 function App() {
 	const [titulo, setTitulo] = useState('');
@@ -50,6 +51,8 @@ function App() {
 	return (
 		<div className="App">
 			App
+			<br />
+			<Lista />
 			<input
 				value={titulo}
 				onChange={(e) => {
