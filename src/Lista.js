@@ -48,14 +48,15 @@ const Lista = (props) => {
 	useEffect(() => {
 		if (agregar) {
 			db.collection('posts')
-				.where('categorias', 'array-contains-any', ['angular', 'react'])
+				.where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
 				.orderBy('creacion', 'desc')
 				.startAfter(ultimo)
+				.limit(2)
 				.get()
 				.then((querySnapshot) => {
 					setAgregar(false);
 					let final = querySnapshot.docs[querySnapshot.docs.length - 1];
-					console.log(final);
+					// console.log(final);
 					if (final === undefined) {
 						setTotal(true);
 					}

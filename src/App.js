@@ -13,7 +13,7 @@ function App() {
 				.add({
 					titulo,
 					cuerpo: `El cuerpo es: ${titulo}`,
-					categorias: ['vue'],
+					categorias: ['angular'],
 					creacion: fs.Timestamp.now(),
 				})
 				.then((docRef) => {
