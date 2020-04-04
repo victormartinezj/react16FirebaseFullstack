@@ -5,6 +5,7 @@ const Lista = (props) => {
 	useEffect(() => {
 		db.collection('posts')
 			.where('categorias', 'array-contains-any', ['angular', 'react'])
+			.orderBy('creacion', 'desc')
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {

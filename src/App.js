@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { db } from './firebase';
+import { db, fs } from './firebase';
 import Lista from './Lista';
 
 function App() {
@@ -13,7 +13,8 @@ function App() {
 				.add({
 					titulo,
 					cuerpo: `El cuerpo es: ${titulo}`,
-					categorias: ['angular', 'react'],
+					categorias: ['vue'],
+					creacion: fs.Timestamp.now(),
 				})
 				.then((docRef) => {
 					setEnviando(false);
