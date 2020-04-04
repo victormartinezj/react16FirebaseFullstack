@@ -9,18 +9,32 @@ function App() {
 
 	useEffect(() => {
 		if (enviando) {
-			// actualizar
 			db.collection('posts')
-				.doc('RGWnwhN0RlpHymP7RAXx')
-				.set({ cuerpo: titulo }, { merge: true })
-				.then(() => {
+				.add({
+					titulo,
+					cuerpo: `El cuerpo es: ${titulo}`,
+					categorias: ['angular', 'react'],
+				})
+				.then((docRef) => {
 					setEnviando(false);
-					console.log(`el id es establecido`);
+					console.log(`el id es: ${docRef.id}`);
 				})
 				.catch((e) => {
 					setEnviando(false);
 					console.log(`error: ${e}`);
 				});
+			// actualizar
+			// db.collection('posts')
+			// 	.doc('RGWnwhN0RlpHymP7RAXx')
+			// 	.set({ cuerpo: titulo }, { merge: true })
+			// 	.then(() => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es establecido`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
 
 			// establcer id, cambiar todos datos de un documento
 			// db.collection('posts')
