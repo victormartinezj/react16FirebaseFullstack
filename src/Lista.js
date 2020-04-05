@@ -5,6 +5,8 @@ const Lista = (props) => {
 	const [agregar, setAgregar] = useState(false);
 	const [ultimo, setUltimo] = useState(null);
 	const [total, setTotal] = useState(false);
+	const [arrayPosts, setArrayPosts] = useState([]);
+	const [eliminar, setEliminar] = useState({ value: false, id: '' });
 
 	useEffect(() => {
 		db.collection('posts')
@@ -16,6 +18,10 @@ const Lista = (props) => {
 				let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 				setUltimo(final);
 				querySnapshot.forEach((doc) => {
+					setArrayPosts((posts) => [
+						...posts,
+						{ id: doc.id, titulo: doc.data().titulo },
+					]);
 					console.log(doc.data());
 				});
 			})
@@ -63,6 +69,10 @@ const Lista = (props) => {
 
 					setUltimo(final);
 					querySnapshot.forEach((doc) => {
+						setArrayPosts((posts) => [
+							...posts,
+							{ id: doc.id, titulo: doc.data().titulo },
+						]);
 						console.log(doc.data());
 					});
 				})
@@ -72,6 +82,22 @@ const Lista = (props) => {
 				});
 		}
 	}, [agregar]);
+
+	useEffect(() => {
+		if (eliminar.value) {
+			db.collection('posts')
+				.doc(eliminar.id)
+				.delete()
+				.then(() => {
+					console.log('eliminación correcta');
+					setEliminar({ value: false, id: '' });
+				})
+				.catch((e) => {
+					setEliminar({ value: false, id: '' });
+					console.log(e);
+				});
+		}
+	}, [eliminar]);
 
 	return (
 		<div>
@@ -88,6 +114,18 @@ const Lista = (props) => {
 					Agregar
 				</button>
 			)}
+			{arrayPosts.map(({ id, titulo }) => (
+				<div key={id}>
+					{`${id} | ${titulo}`}
+					<button
+						onClick={() => {
+							setEliminar({ value: true, id: id });
+						}}
+					>
+						eliminar
+					</button>
+				</div>
+			))}
 		</div>
 	);
 };
