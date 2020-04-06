@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { db, fs } from './firebase';
 import Lista from './Lista';
+import EnviarImg from './EnviarImg';
 
 function App() {
 	const [titulo, setTitulo] = useState('');
@@ -64,28 +65,31 @@ function App() {
 	}, [enviando]);
 
 	return (
-		<div className="App">
-			App
-			<br />
-			<Lista />
-			<input
-				value={titulo}
-				onChange={(e) => {
-					setTitulo(e.target.value);
-				}}
-			/>
-			{enviando ? (
-				<button disabled>Enviando</button>
-			) : (
-				<button
-					onClick={() => {
-						setEnviando(true);
-					}}
-				>
-					Enviar
-				</button>
-			)}
+		<div>
+			<EnviarImg />
 		</div>
+		// <div className="App">
+		// 	App
+		// 	<br />
+		// 	<Lista />
+		// 	<input
+		// 		value={titulo}
+		// 		onChange={(e) => {
+		// 			setTitulo(e.target.value);
+		// 		}}
+		// 	/>
+		// 	{enviando ? (
+		// 		<button disabled>Enviando</button>
+		// 	) : (
+		// 		<button
+		// 			onClick={() => {
+		// 				setEnviando(true);
+		// 			}}
+		// 		>
+		// 			Enviar
+		// 		</button>
+		// 	)}
+		// </div>
 	);
 }
 
