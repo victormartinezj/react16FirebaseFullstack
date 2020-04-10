@@ -4,6 +4,22 @@ import { db } from './firebase';
 const Categorias = (props) => {
 	const [texto, setTexto] = useState('');
 	const [enviar, setEnviar] = useState(false);
+	const [categorias, setCategorias] = useState([]);
+
+	useEffect(() => {
+		db.collection('categorias')
+			.get()
+			.then((documents) => {
+				let tempArray = [];
+				documents.forEach((doc) => {
+					tempArray.push(doc.id);
+				});
+				setCategorias((values) => [...values, ...tempArray]);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	}, []);
 
 	useEffect(() => {
 		if (enviar) {
@@ -22,6 +38,7 @@ const Categorias = (props) => {
 							.set({ activa: true })
 							.then(() => {
 								console.log('la categoría se creo correctamente');
+								setCategorias((values) => [...values, texto]);
 							})
 							.catch((e) => {
 								console.log(e);
@@ -30,12 +47,19 @@ const Categorias = (props) => {
 				})
 				.catch((e) => {
 					console.log(e);
+				})
+				.finally(() => {
+					setTexto('');
+					setEnviar(false);
 				});
 		}
 	}, [enviar]);
 	return (
 		<div>
 			Lista de categorias:
+			{categorias.map((categoria) => (
+				<div key={categoria}>{categoria} </div>
+			))}
 			<br />
 			Agregar nueva categoría:
 			<input
