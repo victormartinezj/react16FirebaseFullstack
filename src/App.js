@@ -1,26 +1,97 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { db, fs } from './firebase';
+import Lista from './Lista';
+import EnviarImg from './EnviarImg';
+import Categorias from './Categorias';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [titulo, setTitulo] = useState('');
+	const [enviando, setEnviando] = useState(false);
+
+	useEffect(() => {
+		if (enviando) {
+			db.collection('posts')
+				.add({
+					titulo,
+					cuerpo: `El cuerpo es: ${titulo}`,
+					categorias: ['angular'],
+					creacion: fs.Timestamp.now(),
+				})
+				.then((docRef) => {
+					setEnviando(false);
+					console.log(`el id es: ${docRef.id}`);
+				})
+				.catch((e) => {
+					setEnviando(false);
+					console.log(`error: ${e}`);
+				});
+			// actualizar
+			// db.collection('posts')
+			// 	.doc('RGWnwhN0RlpHymP7RAXx')
+			// 	.set({ cuerpo: titulo }, { merge: true })
+			// 	.then(() => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es establecido`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
+
+			// establcer id, cambiar todos datos de un documento
+			// db.collection('posts')
+			// 	.doc('miId')
+			// 	.set({ cuerpo: titulo })
+			// 	.then(() => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es establecido`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
+			// agregar datos con id autogenerado
+			// db.collection('posts')
+			// 	.add({ titulo })
+			// 	.then((docRef) => {
+			// 		setEnviando(false);
+			// 		console.log(`el id es: ${docRef.id}`);
+			// 	})
+			// 	.catch((e) => {
+			// 		setEnviando(false);
+			// 		console.log(`error: ${e}`);
+			// 	});
+		}
+	}, [enviando]);
+
+	return (
+		<div>
+			<Categorias />
+		</div>
+		// <div className="App">
+		// 	App
+		// 	<br />
+		// 	<Lista />
+		// 	<input
+		// 		value={titulo}
+		// 		onChange={(e) => {
+		// 			setTitulo(e.target.value);
+		// 		}}
+		// 	/>
+		// 	{enviando ? (
+		// 		<button disabled>Enviando</button>
+		// 	) : (
+		// 		<button
+		// 			onClick={() => {
+		// 				setEnviando(true);
+		// 			}}
+		// 		>
+		// 			Enviar
+		// 		</button>
+		// 	)}
+		// </div>
+	);
 }
 
 export default App;
