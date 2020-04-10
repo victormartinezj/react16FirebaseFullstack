@@ -3,6 +3,7 @@ import './App.css';
 import { db, fs } from './firebase';
 import Lista from './Lista';
 import EnviarImg from './EnviarImg';
+import Categorias from './Categorias';
 
 function App() {
 	const [titulo, setTitulo] = useState('');
@@ -66,7 +67,7 @@ function App() {
 
 	return (
 		<div>
-			<EnviarImg />
+			<Categorias />
 		</div>
 		// <div className="App">
 		// 	App
