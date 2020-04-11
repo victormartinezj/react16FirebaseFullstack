@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
+import { storage } from '../firebase';
 
 var toolbarOptions = [
 	['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -67,16 +68,43 @@ const Editor = (props) => {
 	console.log(quill);
 	console.log(quillRef);
 
-	let handlerImage = () => {
+	let insertToEditor = (datos) => {
 		var rango = quill.getSelection();
-		console.log(rango);
-
-		var datos = prompt('Ingresa la URL');
-		console.log(datos);
-		if (datos) {
-			quill.insertEmbed(rango.index, 'image', datos);
-		}
+		quill.insertEmbed(rango.index, 'image', datos);
 	};
+
+	const saveToServer = (file) => {
+		storage
+			.ref()
+			.child(`blog/${Date.now()}${file.name}`)
+			.put(file)
+			.then((snapshot) => {
+				snapshot.ref
+					.getDownloadURL()
+					.then((url) => {
+						insertToEditor(url);
+					})
+					.catch((e) => {
+						console.log(e);
+					});
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	};
+
+	let handlerImage = () => {
+		const input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('accept', 'image/*');
+		input.click();
+
+		input.onchange = () => {
+			const file = input.files[0];
+			saveToServer(file);
+		};
+	};
+
 	useEffect(() => {
 		if (quill) {
 			quill.getModule('toolbar').addHandler('image', handlerImage);
