@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from './Editor';
+import { db } from '../firebase';
 
 const FormaPublicacion = (props) => {
 	const {
@@ -72,6 +73,63 @@ const FormaPublicacion = (props) => {
 				/>
 				<br />
 				{errors.titulo && <p>{errors.titulo.message}</p>}
+				<br />
+				<label htmlFor="resumen">Resumen</label>
+				<br />
+				<textarea
+					id="resumen"
+					name="resumen"
+					ref={register({
+						required: 'El resumen es requerido',
+						minLength: {
+							value: 50,
+							message: 'El mínimo es de 50 caracteres',
+						},
+						maxLength: {
+							value: 200,
+							message: 'El máximo es de 200 caracteres',
+						},
+					})}
+				/>
+				<br />
+				{errors.resumen && <p>{errors.resumen.message}</p>}
+				<br />
+				<label htmlFor="slug">Slug:</label>
+				<br />
+				<input
+					id="slug"
+					name="slug"
+					ref={register({
+						required: 'El slug es requerido',
+						minLength: {
+							value: 20,
+							message: 'El mínimo es de 20',
+						},
+						validate: async (value) => {
+							const doc = await db.collection('slugs').doc(value).get();
+							if (doc.exists) {
+								return 'El slug ya existe utiliza otro';
+							} else {
+								return true;
+							}
+							// db.collection('slugs')
+							// 	.doc(value)
+							// 	.get()
+							// 	.then((doc) => {
+							// 		if (doc.exists) {
+							// 			console.log('El slug ya existe');
+							// 		} else {
+							// 			console.log('realizar lógica');
+							// 		}
+							// 	})
+							// 	.catch((e) => {
+							// 		console.log(e);
+							// 	});
+						},
+					})}
+				/>
+				<br />
+				{errors.slug && <p>{errors.slug.message}</p>}
 				<br />
 				<h5>Las categorias seleccionadas son:</h5>
 				{errors.categorias && <p>{errors.categorias.message}</p>}
