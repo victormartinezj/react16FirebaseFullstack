@@ -12,7 +12,9 @@ const FormaPublicacion = (props) => {
 		setValue,
 		triggerValidation,
 	} = useForm();
-	console.log(errors);
+
+	const [enviar, setEnviar] = useState(false);
+	const [values, setValues] = useState(null);
 	const [categorias, setCategorias] = useState([
 		{ nombre: 'react', activa: false },
 		{ nombre: 'angular', activa: false },
@@ -24,7 +26,31 @@ const FormaPublicacion = (props) => {
 		{ nombre: 'js', activa: false },
 		{ nombre: 'python', activa: false },
 	]);
-	console.log(categorias);
+
+	useEffect(() => {
+		if (enviar) {
+			const miBatch = db.batch();
+			const miSlug = slugify(values.slug);
+
+			const slugs = db.collection('slugs').doc(miSlug);
+			miBatch.set(slugs, { activo: true });
+			const posts = db.collection('posts').doc(miSlug);
+			miBatch.set(posts, { titulo: values.titulo, resumen: values.resumen });
+			const completos = db.collection('completos').doc(miSlug);
+			miBatch.set(completos, { titulo: values.titulo, cuerpo: values.cuerpo });
+
+			miBatch
+				.commit()
+				.then(() => {
+					console.log('El batch fue correcto');
+					setEnviar(false);
+				})
+				.catch((e) => {
+					setEnviar(false);
+					console.log(e);
+				});
+		}
+	}, [enviar]);
 	useEffect(() => {
 		let seleccion = [];
 		categorias.forEach(({ nombre, activa }) => {
@@ -34,7 +60,6 @@ const FormaPublicacion = (props) => {
 		});
 		setValue('categorias', seleccion);
 		triggerValidation('categorias');
-		console.log(seleccion);
 	}, [categorias]);
 
 	useEffect(() => {
@@ -53,6 +78,8 @@ const FormaPublicacion = (props) => {
 		<div>
 			<form
 				onSubmit={handleSubmit((values) => {
+					setValues(values);
+					setEnviar(true);
 					console.log(values);
 				})}
 			>
@@ -109,7 +136,6 @@ const FormaPublicacion = (props) => {
 						validate: async (value) => {
 							try {
 								const miSlug = slugify(value);
-								console.log(miSlug);
 
 								const doc = await db.collection('slugs').doc(miSlug).get();
 								if (doc.exists) {

@@ -65,8 +65,6 @@ const miModulo = {
 const Editor = (props) => {
 	const { setValue } = props;
 	const { quill, quillRef } = useQuill({ modules: miModulo, formats: format });
-	console.log(quill);
-	console.log(quillRef);
 
 	let insertToEditor = (datos) => {
 		var rango = quill.getSelection();
@@ -109,7 +107,7 @@ const Editor = (props) => {
 		if (quill) {
 			quill.getModule('toolbar').addHandler('image', handlerImage);
 			quill.on('text-change', (delta, oldDelta, source) => {
-				setValue('cuerpo', quill.root.innerHTML);
+				setValue('cuerpo', JSON.stringify(quill.root.innerHTML));
 				console.log(quill.root.innerHTML);
 			});
 		}
