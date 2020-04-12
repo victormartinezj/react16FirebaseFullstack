@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from './Editor';
 import { db } from '../firebase';
+import slugify from 'react-slugify';
 
 const FormaPublicacion = (props) => {
 	const {
@@ -106,11 +107,18 @@ const FormaPublicacion = (props) => {
 							message: 'El mínimo es de 20',
 						},
 						validate: async (value) => {
-							const doc = await db.collection('slugs').doc(value).get();
-							if (doc.exists) {
-								return 'El slug ya existe utiliza otro';
-							} else {
-								return true;
+							try {
+								const miSlug = slugify(value);
+								console.log(miSlug);
+
+								const doc = await db.collection('slugs').doc(miSlug).get();
+								if (doc.exists) {
+									return 'El slug ya existe utiliza otro';
+								} else {
+									return true;
+								}
+							} catch (e) {
+								console.log(e);
 							}
 							// db.collection('slugs')
 							// 	.doc(value)
