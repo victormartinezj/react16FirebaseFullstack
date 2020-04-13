@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from './Editor';
-import { db } from '../firebase';
+import { db, fs } from '../firebase';
 import slugify from 'react-slugify';
 
 const FormaPublicacion = (props) => {
@@ -31,13 +31,24 @@ const FormaPublicacion = (props) => {
 		if (enviar) {
 			const miBatch = db.batch();
 			const miSlug = slugify(values.slug);
+			const fechaCreacion = fs.Timestamp.now();
 
 			const slugs = db.collection('slugs').doc(miSlug);
 			miBatch.set(slugs, { activo: true });
 			const posts = db.collection('posts').doc(miSlug);
-			miBatch.set(posts, { titulo: values.titulo, resumen: values.resumen });
+			miBatch.set(posts, {
+				titulo: values.titulo,
+				resumen: values.resumen,
+				categorias: values.categorias,
+				creacion: fechaCreacion,
+			});
 			const completos = db.collection('completos').doc(miSlug);
-			miBatch.set(completos, { titulo: values.titulo, cuerpo: values.cuerpo });
+			miBatch.set(completos, {
+				titulo: values.titulo,
+				cuerpo: values.cuerpo,
+				categorias: values.categorias,
+				creacion: fechaCreacion,
+			});
 
 			miBatch
 				.commit()

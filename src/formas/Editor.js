@@ -107,8 +107,10 @@ const Editor = (props) => {
 		if (quill) {
 			quill.getModule('toolbar').addHandler('image', handlerImage);
 			quill.on('text-change', (delta, oldDelta, source) => {
-				setValue('cuerpo', JSON.stringify(quill.root.innerHTML));
-				console.log(quill.root.innerHTML);
+				setValue('cuerpo', JSON.stringify(quill.getContents()));
+				// console.log(quill.root.innerHTML);
+				// console.log(JSON.stringify(quill.root.innerHTML));
+				// console.log(JSON.stringify(quill.getContents()));
 			});
 		}
 		return () => {
