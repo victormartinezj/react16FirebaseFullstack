@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
+import { connect } from 'react-redux';
 
 const Lista = (props) => {
 	const [agregar, setAgregar] = useState(false);
@@ -129,4 +130,18 @@ const Lista = (props) => {
 		</div>
 	);
 };
-export default Lista;
+
+const mapStateToProps = (state) => {
+	return {
+		todoElState: state,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		unDispatch: () => {
+			dispatch({ type: 'PRUEBA' });
+		},
+	};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Lista);
