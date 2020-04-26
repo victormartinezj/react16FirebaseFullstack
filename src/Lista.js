@@ -7,60 +7,52 @@ const Lista = (props) => {
 	const [ultimo, setUltimo] = useState(null);
 	const [total, setTotal] = useState(false);
 	const [arrayPosts, setArrayPosts] = useState([]);
-	const [eliminar, setEliminar] = useState({ value: false, id: '' });
 
 	useEffect(() => {
-		db.collection('posts')
-			.where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
-			.orderBy('creacion', 'desc')
-			.limit(2)
-			.get()
-			.then((querySnapshot) => {
+		async function cargaInicial() {
+			try {
+				const querySnapshot = await db
+					.collection('posts')
+					.where('categorias', 'array-contains-any', [
+						'angular',
+						'react',
+						'vue',
+					])
+					.orderBy('creacion', 'desc')
+					.limit(2)
+					.get();
 				let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 				setUltimo(final);
+				let tempArray = [];
 				querySnapshot.forEach((doc) => {
-					setArrayPosts((posts) => [
-						...posts,
+					tempArray = tempArray.concat([
 						{ id: doc.id, titulo: doc.data().titulo },
 					]);
 					console.log(doc.data());
 				});
-			})
-			.catch((e) => {
-				console.log(e);
-			});
-		// db.collection('posts')
-		// 	.doc('miId')
-		// 	.get()
-		// 	.then((doc) => {
-		// 		if (doc.exists) {
-		// 			console.log(doc.data());
-		// 		}
-		// 	})
-		// 	.catch((e) => {
-		// 		console.log(e);
-		// 	});
-		// db.collection('posts')
-		// 	.get()
-		// 	.then((querySnapshot) => {
-		// 		querySnapshot.forEach((doc) => {
-		// 			console.log(doc.data());
-		// 		});
-		// 	})
-		// 	.catch((e) => {
-		// 		console.log(e);
-		// 	});
+				setArrayPosts((posts) => [...posts, ...tempArray]);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		cargaInicial();
 	}, []);
 
 	useEffect(() => {
 		if (agregar) {
-			db.collection('posts')
-				.where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
-				.orderBy('creacion', 'desc')
-				.startAfter(ultimo)
-				.limit(2)
-				.get()
-				.then((querySnapshot) => {
+			async function cargaNueva() {
+				try {
+					const querySnapshot = await db
+						.collection('posts')
+						.where('categorias', 'array-contains-any', [
+							'angular',
+							'react',
+							'vue',
+						])
+						.orderBy('creacion', 'desc')
+						.startAfter(ultimo)
+						.limit(2)
+						.get();
 					setAgregar(false);
 					let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 					// console.log(final);
@@ -69,36 +61,22 @@ const Lista = (props) => {
 					}
 
 					setUltimo(final);
+					let tempArray = [];
 					querySnapshot.forEach((doc) => {
-						setArrayPosts((posts) => [
-							...posts,
+						tempArray = tempArray.concat([
 							{ id: doc.id, titulo: doc.data().titulo },
 						]);
 						console.log(doc.data());
 					});
-				})
-				.catch((e) => {
+					setArrayPosts((posts) => [...posts, ...tempArray]);
+				} catch (error) {
+					console.log(error);
 					setAgregar(false);
-					console.log(e);
-				});
+				}
+			}
+			cargaNueva();
 		}
 	}, [agregar]);
-
-	useEffect(() => {
-		if (eliminar.value) {
-			db.collection('posts')
-				.doc(eliminar.id)
-				.delete()
-				.then(() => {
-					console.log('eliminación correcta');
-					setEliminar({ value: false, id: '' });
-				})
-				.catch((e) => {
-					setEliminar({ value: false, id: '' });
-					console.log(e);
-				});
-		}
-	}, [eliminar]);
 
 	return (
 		<div>
@@ -116,16 +94,7 @@ const Lista = (props) => {
 				</button>
 			)}
 			{arrayPosts.map(({ id, titulo }) => (
-				<div key={id}>
-					{`${id} | ${titulo}`}
-					<button
-						onClick={() => {
-							setEliminar({ value: true, id: id });
-						}}
-					>
-						eliminar
-					</button>
-				</div>
+				<div key={id}>{`${id} | ${titulo}`}</div>
 			))}
 		</div>
 	);
