@@ -18,6 +18,17 @@ const reducerLista = (
 			tempState.ultimo = action.payload.ultimo;
 			tempState.comenzar = false;
 			return tempState;
+		case 'LISTA_SON_TODOS':
+			tempState.total = true;
+			return tempState;
+		case 'LISTA_AGREGAR_MAS':
+			tempState.posts = [...state.posts, ...action.payload.posts];
+			tempState.ultimo = action.payload.ultimo;
+			tempState.cargando = false;
+			return tempState;
+		case 'LISTA_CARGANDO_MAS':
+			tempState.cargando = true;
+			return tempState;
 
 		default:
 			return state;
