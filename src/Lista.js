@@ -83,22 +83,28 @@ const Lista = ({ stateLista, comenzar }) => {
 
 	return (
 		<div>
-			Lista:
-			{/* <br />
-			{total ? (
-				<button disabled>Agregar</button>
+			{stateLista.comenzar ? (
+				<p>Cargando...</p>
 			) : (
-				<button
-					onClick={() => {
-						setAgregar(true);
-					}}
-				>
-					Agregar
-				</button>
-			)} */}
-			{stateLista.posts.map(({ id, titulo }) => (
-				<div key={id}>{`${id} | ${titulo}`}</div>
-			))}
+				<div>
+					Lista:
+					{/* <br />
+				{total ? (
+					<button disabled>Agregar</button>
+					) : (
+						<button
+						onClick={() => {
+							setAgregar(true);
+						}}
+						>
+						Agregar
+						</button>
+					)} */}
+					{stateLista.posts.map(({ id, titulo }) => (
+						<div key={id}>{`${id} | ${titulo}`}</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 };
