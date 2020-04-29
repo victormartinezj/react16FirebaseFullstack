@@ -5,7 +5,34 @@ const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
 	let tempState = { ...state };
 	switch (action.type) {
 		case 'ESTABLECER_CATEGORIAS':
-			tempState = { servidor: action.payload, lista: action.payload };
+			tempState = {
+				servidor: action.payload,
+				lista: action.payload.map((cat) => {
+					return { nombre: cat, activa: false };
+				}),
+			};
+			return tempState;
+		case 'ACTIVAR_CATEGORIA':
+			tempState = {
+				lista: tempState.lista.map((cat) => {
+					if (action.payload === cat.nombre) {
+						return { nombre: cat.nombre, activa: true };
+					} else {
+						return cat;
+					}
+				}),
+			};
+			return tempState;
+		case 'DESACTIVAR_CATEGORIA':
+			tempState = {
+				lista: tempState.lista.map((cat) => {
+					if (action.payload === cat.nombre) {
+						return { nombre: cat.nombre, activa: false };
+					} else {
+						return cat;
+					}
+				}),
+			};
 			return tempState;
 
 		default:
