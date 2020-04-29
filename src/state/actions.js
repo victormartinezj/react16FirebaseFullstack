@@ -1,5 +1,25 @@
 import { db } from '../firebase';
 
+export const ACTION_CATEGORIAS_CARGA = async (dispatch, getState) => {
+	try {
+		const documents = await db.collection('categorias').get();
+		let tempArray = [];
+		documents.forEach((doc) => {
+			tempArray = tempArray.concat([doc.id]);
+			// tempArray.push(doc.id);
+		});
+		dispatch({ type: 'ESTABLECER_CATEGORIAS', payload: tempArray });
+		// .then((documents) => {
+		//     setCategorias((values) => [...values, ...tempArray]);
+		// })
+		// .catch((e) => {
+		//     console.log(e);
+		// });
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const ACTION_LISTA_INICIAR = async (dispatch, getState) => {
 	try {
 		const querySnapshot = await db

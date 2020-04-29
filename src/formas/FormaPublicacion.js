@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form';
 import Editor from './Editor';
 import { db, fs } from '../firebase';
 import slugify from 'react-slugify';
+import { connect } from 'react-redux';
 
-const FormaPublicacion = (props) => {
+const FormaPublicacion = ({ categoriasServidor }) => {
 	const {
 		register,
 		handleSubmit,
@@ -16,16 +17,24 @@ const FormaPublicacion = (props) => {
 	const [enviar, setEnviar] = useState(false);
 	const [values, setValues] = useState(null);
 	const [categorias, setCategorias] = useState([
-		{ nombre: 'react', activa: false },
-		{ nombre: 'angular', activa: false },
-		{ nombre: 'django', activa: false },
-		{ nombre: 'vue', activa: false },
-		{ nombre: 'rails', activa: false },
-		{ nombre: 'node', activa: false },
-		{ nombre: 'ruby', activa: false },
-		{ nombre: 'js', activa: false },
-		{ nombre: 'python', activa: false },
+		// { nombre: 'react', activa: false },
+		// { nombre: 'angular', activa: false },
+		// { nombre: 'django', activa: false },
+		// { nombre: 'vue', activa: false },
+		// { nombre: 'rails', activa: false },
+		// { nombre: 'node', activa: false },
+		// { nombre: 'ruby', activa: false },
+		// { nombre: 'js', activa: false },
+		// { nombre: 'python', activa: false },
 	]);
+
+	useEffect(() => {
+		setCategorias(() => {
+			return categoriasServidor.map((cat) => {
+				return { nombre: cat, activa: false };
+			});
+		});
+	}, [categoriasServidor]);
 
 	useEffect(() => {
 		if (enviar) {
@@ -242,4 +251,11 @@ const FormaPublicacion = (props) => {
 		</div>
 	);
 };
-export default FormaPublicacion;
+
+const mapStateToProps = (state) => {
+	return {
+		categoriasServidor: state.categorias.servidor,
+	};
+};
+
+export default connect(mapStateToProps, null)(FormaPublicacion);

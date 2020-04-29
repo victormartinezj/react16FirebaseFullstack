@@ -1,6 +1,18 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
+	let tempState = { ...state };
+	switch (action.type) {
+		case 'ESTABLECER_CATEGORIAS':
+			tempState = { servidor: action.payload, lista: action.payload };
+			return tempState;
+
+		default:
+			return state;
+	}
+};
+
 const reducerLista = (
 	state = {
 		posts: [],
@@ -42,6 +54,7 @@ const reducerPost = (state = { id: null }, action) => {
 const root = combineReducers({
 	lista: reducerLista,
 	post: reducerPost,
+	categorias: reducerCategorias,
 });
 let store = createStore(root, applyMiddleware(thunk));
 

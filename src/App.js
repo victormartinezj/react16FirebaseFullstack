@@ -10,8 +10,14 @@ import {
 import FormaRegistro from './formas/FormaRegistro';
 import FormaLogIn from './formas/FormaLogIn';
 import Lista from './Lista';
+import FormaPublicacion from './formas/FormaPublicacion';
+import { connect } from 'react-redux';
+import { ACTION_CATEGORIAS_CARGA } from './state/actions';
 
-function App() {
+function App({ cargarCategorias }) {
+	useEffect(() => {
+		cargarCategorias();
+	}, []);
 	return (
 		<div>
 			<Router>
@@ -25,6 +31,9 @@ function App() {
 					<Route path="/login">
 						<FormaLogIn />
 					</Route>
+					<Route path="/publicacion">
+						<FormaPublicacion />
+					</Route>
 					<Redirect to="/" />
 				</Switch>
 			</Router>
@@ -32,4 +41,12 @@ function App() {
 	);
 }
 
-export default App;
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		cargarCategorias: () => {
+			dispatch(ACTION_CATEGORIAS_CARGA);
+		},
+	};
+};
+
+export default connect(null, mapDispatchToProps)(App);
