@@ -22,12 +22,26 @@ export const ACTION_CATEGORIAS_CARGA = async (dispatch, getState) => {
 
 export const ACTION_LISTA_INICIAR = async (dispatch, getState) => {
 	try {
-		const querySnapshot = await db
-			.collection('posts')
-			.where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
-			.orderBy('creacion', 'desc')
-			.limit(2)
-			.get();
+		let querySnapshot;
+		let categoriasActivas = getState()
+			.categorias.lista.filter((cat) => {
+				return cat.activa;
+			})
+			.map((cat) => cat.nombre);
+		if (categoriasActivas.length !== 0) {
+			querySnapshot = await db
+				.collection('posts')
+				.where('categorias', 'array-contains-any', [...categoriasActivas])
+				.orderBy('creacion', 'desc')
+				.limit(2)
+				.get();
+		} else {
+			querySnapshot = await db
+				.collection('posts')
+				.orderBy('creacion', 'desc')
+				.limit(2)
+				.get();
+		}
 		let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 		let tempArray = [];
 		querySnapshot.forEach((doc) => {
@@ -52,13 +66,35 @@ export const ACTION_LISTA_MAS_POSTS = async (dispatch, getState) => {
 	dispatch({ type: 'LISTA_CARGANDO_MAS' });
 
 	try {
-		const querySnapshot = await db
-			.collection('posts')
-			.where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
-			.orderBy('creacion', 'desc')
-			.startAfter(lista.ultimo)
-			.limit(2)
-			.get();
+		let querySnapshot;
+		let categoriasActivas = getState()
+			.categorias.lista.filter((cat) => {
+				return cat.activa;
+			})
+			.map((cat) => cat.nombre);
+		if (categoriasActivas.length !== 0) {
+			querySnapshot = await db
+				.collection('posts')
+				.where('categorias', 'array-contains-any', [...categoriasActivas])
+				.orderBy('creacion', 'desc')
+				.startAfter(lista.ultimo)
+				.limit(2)
+				.get();
+		} else {
+			querySnapshot = await db
+				.collection('posts')
+				.orderBy('creacion', 'desc')
+				.startAfter(lista.ultimo)
+				.limit(2)
+				.get();
+		}
+		// const querySnapshot = await db
+		// .collection('posts')
+		// .where('categorias', 'array-contains-any', ['angular', 'react', 'vue'])
+		// .orderBy('creacion', 'desc')
+		// .startAfter(lista.ultimo)
+		// .limit(2)
+		// .get();
 		// setAgregar(false);
 		let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 		// console.log(final);

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { db } from './firebase';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ACTION_LISTA_INICIAR, ACTION_LISTA_MAS_POSTS } from './state/actions';
 import SeleccionarCategorias from './SeleccionarCategorias';
 
-const Lista = ({ stateLista, comenzar, mas }) => {
+const Lista = ({ stateLista, comenzar, mas, categorias }) => {
 	useEffect(() => {
 		comenzar();
-	}, []);
+	}, [categorias]);
 
 	return (
 		<div>
@@ -40,6 +39,7 @@ const Lista = ({ stateLista, comenzar, mas }) => {
 const mapStateToProps = (state) => {
 	return {
 		stateLista: state.lista,
+		categorias: state.categorias.lista,
 	};
 };
 

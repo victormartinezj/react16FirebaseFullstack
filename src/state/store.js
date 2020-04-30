@@ -62,6 +62,17 @@ const reducerLista = (
 		case 'LISTA_SON_TODOS':
 			tempState.total = true;
 			return tempState;
+		case 'ACTIVAR_CATEGORIA':
+		case 'DESACTIVAR_CATEGORIA':
+			tempState = {
+				posts: [],
+				ultimo: null,
+				cargando: false,
+				total: false,
+				comenzar: true,
+			};
+			// tempState.total = false;
+			return tempState;
 		case 'LISTA_AGREGAR_MAS':
 			tempState.posts = [...state.posts, ...action.payload.posts];
 			tempState.ultimo = action.payload.ultimo;
