@@ -43,6 +43,10 @@ export const ACTION_LISTA_INICIAR = async (dispatch, getState) => {
 				.get();
 		}
 		let final = querySnapshot.docs[querySnapshot.docs.length - 1];
+		if (final === undefined) {
+			// setTotal(true);
+			dispatch({ type: 'LISTA_SON_TODOS' });
+		}
 		let tempArray = [];
 		querySnapshot.forEach((doc) => {
 			tempArray = tempArray.concat([{ id: doc.id, titulo: doc.data().titulo }]);
@@ -98,6 +102,7 @@ export const ACTION_LISTA_MAS_POSTS = async (dispatch, getState) => {
 		// setAgregar(false);
 		let final = querySnapshot.docs[querySnapshot.docs.length - 1];
 		// console.log(final);
+
 		if (final === undefined) {
 			// setTotal(true);
 			dispatch({ type: 'LISTA_SON_TODOS' });
