@@ -87,8 +87,25 @@ const reducerLista = (
 	}
 };
 
-const reducerPost = (state = { id: null }, action) => {
-	return state;
+const reducerPost = (
+	state = { cargando: true, post: {}, error: false },
+	action
+) => {
+	let tempState = state;
+	switch (action.type) {
+		case 'ESTABLECER_POST':
+			tempState = { ...tempState, cargando: false, post: action.payload };
+			return tempState;
+		case 'ERROR_AL_CARGAR_EL_POST':
+			tempState = { ...tempState, cargando: false, error: true };
+			return tempState;
+		case 'LIMPIAR_POST':
+			tempState = { cargando: true, post: {}, error: false };
+			return tempState;
+
+		default:
+			return state;
+	}
 };
 
 const root = combineReducers({

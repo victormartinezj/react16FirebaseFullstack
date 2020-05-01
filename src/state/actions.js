@@ -15,6 +15,7 @@ export const ACTION_CARGAR_POST = (slug) => async (dispatch, getState) => {
 			dispatch({ type: 'ERROR_AL_CARGAR_EL_POST' });
 		}
 	} catch (error) {
+		dispatch({ type: 'ERROR_AL_CARGAR_EL_POST' });
 		console.log(error);
 	}
 };
