@@ -1,11 +1,16 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
+const reducerCategorias = (
+	state = { servidor: [], lista: [], cargadas: false },
+	action
+) => {
 	let tempState = { ...state };
 	switch (action.type) {
 		case 'ESTABLECER_CATEGORIAS':
 			tempState = {
+				...tempState,
+				cargadas: true,
 				servidor: action.payload,
 				lista: action.payload.map((cat) => {
 					return { nombre: cat, activa: false };
@@ -15,6 +20,7 @@ const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
 		case 'ACTIVAR_CATEGORIA':
 			tempState = {
 				...tempState,
+				cargadas: false,
 				lista: state.lista.map((cat) => {
 					if (cat.nombre === action.payload) {
 						return { ...cat, activa: true };
@@ -27,6 +33,7 @@ const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
 		case 'DESACTIVAR_CATEGORIA':
 			tempState = {
 				...tempState,
+				cargadas: false,
 				lista: state.lista.map((cat) => {
 					if (cat.nombre === action.payload) {
 						return { ...cat, activa: false };
