@@ -1,5 +1,23 @@
 import { db } from '../firebase';
 
+export const ACTION_CARGAR_POST = (slug) => async (dispatch, getState) => {
+	try {
+		console.log(slug);
+		const doc = await db.collection('completos').doc(slug).get();
+		console.log(doc.id);
+		console.log(doc.data());
+		if (doc.exists) {
+			dispatch({
+				type: 'ESTABLECER_POST',
+				payload: { data: doc.data(), slug: doc.id },
+			});
+		} else {
+			dispatch({ type: 'ERROR_AL_CARGAR_EL_POST' });
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
 export const ACTION_CATEGORIAS_CARGA = async (dispatch, getState) => {
 	try {
 		const documents = await db.collection('categorias').get();

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ACTION_LISTA_INICIAR, ACTION_LISTA_MAS_POSTS } from './state/actions';
 import SeleccionarCategorias from './SeleccionarCategorias';
+import { Link } from 'react-router-dom';
 
 const Lista = ({ stateLista, comenzar, mas, categorias }) => {
 	useEffect(() => {
@@ -17,7 +18,9 @@ const Lista = ({ stateLista, comenzar, mas, categorias }) => {
 					Lista:
 					<SeleccionarCategorias />
 					{stateLista.posts.map(({ id, titulo }) => (
-						<div key={id}>{`${id} | ${titulo}`}</div>
+						<Link to={`/post/${id}`} key={id}>
+							<div key={id}>{`${id} | ${titulo}`}</div>
+						</Link>
 					))}
 					{stateLista.total ? (
 						<p>Son todos los posts</p>

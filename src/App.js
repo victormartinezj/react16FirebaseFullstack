@@ -13,6 +13,7 @@ import Lista from './Lista';
 import FormaPublicacion from './formas/FormaPublicacion';
 import { connect } from 'react-redux';
 import { ACTION_CATEGORIAS_CARGA } from './state/actions';
+import Post from './Post';
 
 function App({ cargarCategorias }) {
 	useEffect(() => {
@@ -33,6 +34,9 @@ function App({ cargarCategorias }) {
 					</Route>
 					<Route path="/publicacion">
 						<FormaPublicacion />
+					</Route>
+					<Route path="/post/:slug">
+						<Post />
 					</Route>
 					<Redirect to="/" />
 				</Switch>
