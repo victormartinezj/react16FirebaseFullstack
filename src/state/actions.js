@@ -1,4 +1,30 @@
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
+
+export const ACTION_CREAR_USUARIO = ({ correo, password, nombre }) => (
+	dispatch,
+	getState
+) => {
+	auth
+		.createUserWithEmailAndPassword(correo, password)
+		.then((datos) => {
+			console.log('registro exitoso');
+			console.log(datos);
+			if (datos.user) {
+				datos.user
+					.updateProfile({ displayName: nombre })
+					.then(() => {
+						console.log('Perfil actualizado');
+					})
+					.catch((e) => {
+						console.log(e);
+						console.log('Perfil sin actualizar');
+					});
+			}
+		})
+		.catch((e) => {
+			console.log(e);
+		});
+};
 
 export const ACTION_CARGAR_POST = (slug) => async (dispatch, getState) => {
 	try {

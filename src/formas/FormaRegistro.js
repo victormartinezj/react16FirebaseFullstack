@@ -1,7 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { connect } from 'react-redux';
+import { ACTION_CREAR_USUARIO } from '../state/actions';
 
-const FormaPublicacion = (props) => {
+const FormaRegistro = ({ registroUsuario }) => {
 	const { register, handleSubmit, errors, watch } = useForm();
 
 	return (
@@ -9,6 +11,7 @@ const FormaPublicacion = (props) => {
 			<form
 				onSubmit={handleSubmit((values) => {
 					console.log(values);
+					registroUsuario(values);
 				})}
 			>
 				<label>Nombre</label>
@@ -74,4 +77,13 @@ const FormaPublicacion = (props) => {
 		</div>
 	);
 };
-export default FormaPublicacion;
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		registroUsuario: (values) => {
+			dispatch(ACTION_CREAR_USUARIO(values));
+		},
+	};
+};
+
+export default connect(null, mapDispatchToProps)(FormaRegistro);
