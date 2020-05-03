@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ACTION_CARGAR_POST } from './state/actions';
+import EditorPost from './EditorPost';
 
 const Post = ({ post, solicitarPost, limpiarPost }) => {
 	console.log(useParams());
@@ -21,7 +22,10 @@ const Post = ({ post, solicitarPost, limpiarPost }) => {
 					{post.error ? (
 						<p>Error al cargar el post</p>
 					) : (
-						<div>{post.post.data.titulo}</div>
+						<div>
+							<div>{post.post.data.titulo}</div>
+							<EditorPost data={post.post.data.cuerpo} />
+						</div>
 					)}
 				</div>
 			)}
