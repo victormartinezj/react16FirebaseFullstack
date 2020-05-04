@@ -1,6 +1,18 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+const reducerUsuario = (state = { usuario: null }, action) => {
+	let tempState = { ...state };
+	switch (action.type) {
+		case 'ESTABLECER_USUARIO':
+			tempState.usuario = action.payload;
+			return tempState;
+
+		default:
+			return state;
+	}
+};
+
 const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
 	let tempState = { ...state };
 	switch (action.type) {
@@ -112,6 +124,7 @@ const root = combineReducers({
 	lista: reducerLista,
 	post: reducerPost,
 	categorias: reducerCategorias,
+	usuario: reducerUsuario,
 });
 let store = createStore(root, applyMiddleware(thunk));
 

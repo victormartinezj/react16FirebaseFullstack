@@ -14,14 +14,27 @@ import FormaPublicacion from './formas/FormaPublicacion';
 import { connect } from 'react-redux';
 import { ACTION_CATEGORIAS_CARGA } from './state/actions';
 import Post from './Post';
+import Navegacion from './Navegacion';
+import { auth } from './firebase';
 
-function App({ cargarCategorias }) {
+function App({ cargarCategorias, cargarUsuario, usuario }) {
 	useEffect(() => {
 		cargarCategorias();
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			if (user) {
+				console.log(user);
+				cargarUsuario(user);
+			}
+		});
+		return () => unsubscribe();
 	}, []);
 	return (
 		<div>
 			<Router>
+				<Navegacion usuario={usuario} />
 				<Switch>
 					<Route path="/" exact>
 						<Lista />
@@ -45,12 +58,21 @@ function App({ cargarCategorias }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapStateToProps = (state) => {
+	return {
+		usuario: state.usuario.usuario,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
 	return {
 		cargarCategorias: () => {
 			dispatch(ACTION_CATEGORIAS_CARGA);
 		},
+		cargarUsuario: (usuario) => {
+			dispatch({ type: 'ESTABLECER_USUARIO', payload: usuario });
+		},
 	};
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
