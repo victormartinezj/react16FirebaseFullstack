@@ -1,5 +1,19 @@
 import { db, auth } from '../firebase';
 
+export const ACTION_LOGIN_USUARIO = ({ correo, password }) => (
+	dispatch,
+	getState
+) => {
+	auth
+		.signInWithEmailAndPassword(correo, password)
+		.then((datos) => {
+			console.log('login exitoso');
+			console.log(datos);
+		})
+		.catch((e) => {
+			console.log(e);
+		});
+};
 export const ACTION_CREAR_USUARIO = ({ correo, password, nombre }) => (
 	dispatch,
 	getState
