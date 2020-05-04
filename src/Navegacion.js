@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { auth } from './firebase';
 
 const Navegacion = ({ usuario }) => (
 	<div>
@@ -16,7 +17,19 @@ const Navegacion = ({ usuario }) => (
 			<li>
 				<Link to="/publicacion">publicacion</Link>
 			</li>
-			{usuario ? <li>Logout</li> : null}
+			{usuario ? (
+				<li>
+					<button
+						onClick={() => {
+							auth.signOut().catch((e) => {
+								console.log(e);
+							});
+						}}
+					>
+						Logout
+					</button>
+				</li>
+			) : null}
 		</ul>
 	</div>
 );

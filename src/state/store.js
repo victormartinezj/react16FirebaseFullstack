@@ -7,6 +7,9 @@ const reducerUsuario = (state = { usuario: null }, action) => {
 		case 'ESTABLECER_USUARIO':
 			tempState.usuario = action.payload;
 			return tempState;
+		case 'LIMPIAR_USUARIO':
+			tempState.usuario = null;
+			return tempState;
 
 		default:
 			return state;

@@ -17,7 +17,7 @@ import Post from './Post';
 import Navegacion from './Navegacion';
 import { auth } from './firebase';
 
-function App({ cargarCategorias, cargarUsuario, usuario }) {
+function App({ cargarCategorias, cargarUsuario, usuario, limpiarUsuario }) {
 	useEffect(() => {
 		cargarCategorias();
 	}, []);
@@ -27,6 +27,8 @@ function App({ cargarCategorias, cargarUsuario, usuario }) {
 			if (user) {
 				console.log(user);
 				cargarUsuario(user);
+			} else {
+				limpiarUsuario();
 			}
 		});
 		return () => unsubscribe();
@@ -71,6 +73,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		cargarUsuario: (usuario) => {
 			dispatch({ type: 'ESTABLECER_USUARIO', payload: usuario });
+		},
+		limpiarUsuario: () => {
+			dispatch({ type: 'LIMPIAR_USUARIO' });
 		},
 	};
 };
