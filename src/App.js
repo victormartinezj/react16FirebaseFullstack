@@ -37,24 +37,38 @@ function App({ cargarCategorias, cargarUsuario, usuario, limpiarUsuario }) {
 		<div>
 			<Router>
 				<Navegacion usuario={usuario} />
-				<Switch>
-					<Route path="/" exact>
-						<Lista />
-					</Route>
-					<Route path="/signup">
-						<FormaRegistro />
-					</Route>
-					<Route path="/login">
-						<FormaLogIn />
-					</Route>
-					<Route path="/publicacion">
-						<FormaPublicacion />
-					</Route>
-					<Route path="/post/:slug">
-						<Post />
-					</Route>
-					<Redirect to="/" />
-				</Switch>
+				{usuario ? (
+					<Switch>
+						<Route path="/" exact>
+							<Lista />
+						</Route>
+
+						<Route path="/publicacion">
+							<FormaPublicacion />
+						</Route>
+						<Route path="/post/:slug">
+							<Post />
+						</Route>
+						<Redirect to="/" />
+					</Switch>
+				) : (
+					<Switch>
+						<Route path="/" exact>
+							<Lista />
+						</Route>
+						<Route path="/signup">
+							<FormaRegistro />
+						</Route>
+						<Route path="/login">
+							<FormaLogIn />
+						</Route>
+
+						<Route path="/post/:slug">
+							<Post />
+						</Route>
+						<Redirect to="/" />
+					</Switch>
+				)}
 			</Router>
 		</div>
 	);

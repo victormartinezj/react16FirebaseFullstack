@@ -8,28 +8,34 @@ const Navegacion = ({ usuario }) => (
 			<li>
 				<Link to="/">home</Link>
 			</li>
-			<li>
-				<Link to="/signup">signup</Link>
-			</li>
-			<li>
-				<Link to="/login">login</Link>
-			</li>
-			<li>
-				<Link to="/publicacion">publicacion</Link>
-			</li>
+
 			{usuario ? (
-				<li>
-					<button
-						onClick={() => {
-							auth.signOut().catch((e) => {
-								console.log(e);
-							});
-						}}
-					>
-						Logout
-					</button>
-				</li>
-			) : null}
+				<>
+					<li>
+						<Link to="/publicacion">publicacion</Link>
+					</li>
+					<li>
+						<button
+							onClick={() => {
+								auth.signOut().catch((e) => {
+									console.log(e);
+								});
+							}}
+						>
+							Logout
+						</button>
+					</li>
+				</>
+			) : (
+				<>
+					<li>
+						<Link to="/signup">signup</Link>
+					</li>
+					<li>
+						<Link to="/login">login</Link>
+					</li>
+				</>
+			)}
 		</ul>
 	</div>
 );
