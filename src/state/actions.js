@@ -1,4 +1,43 @@
-import { db, auth } from '../firebase';
+import { db, auth, fs } from '../firebase';
+import slugify from 'react-slugify';
+
+export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
+	try {
+		const miBatch = db.batch();
+		const miSlug = slugify(values.slug);
+		const fechaCreacion = fs.Timestamp.now();
+
+		const slugs = db.collection('slugs').doc(miSlug);
+		miBatch.set(slugs, { activo: true });
+		const posts = db.collection('posts').doc(miSlug);
+		miBatch.set(posts, {
+			titulo: values.titulo,
+			resumen: values.resumen,
+			categorias: values.categorias,
+			creacion: fechaCreacion,
+			autor: values.usuario,
+		});
+		const completos = db.collection('completos').doc(miSlug);
+		miBatch.set(completos, {
+			titulo: values.titulo,
+			cuerpo: values.cuerpo,
+			categorias: values.categorias,
+			creacion: fechaCreacion,
+			autor: values.usuario,
+		});
+
+		miBatch
+			.commit()
+			.then(() => {
+				console.log('El batch fue correcto');
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 export const ACTION_LOGIN_USUARIO = ({ correo, password }) => (
 	dispatch,
