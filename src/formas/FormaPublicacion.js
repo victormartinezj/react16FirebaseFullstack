@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import slugify from 'react-slugify';
 import { connect } from 'react-redux';
 import { ACTION_CREAR_NUEVO_POST } from '../state/actions';
+import Categorias from '../Categorias';
 
 const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 	const {
@@ -181,6 +182,8 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 						);
 					}
 				})}
+				<br />
+				<Categorias />
 				<br />
 
 				<label htmlFor="cuerpo">Cuerpo</label>

@@ -1,66 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { db } from './firebase';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { ACTION_CREAR_NUEVA_CATEGORIA } from './state/actions';
 
-const Categorias = (props) => {
+const Categorias = ({ crearNuevaCategoria }) => {
 	const [texto, setTexto] = useState('');
-	const [enviar, setEnviar] = useState(false);
-	const [categorias, setCategorias] = useState([]);
 
-	useEffect(() => {
-		db.collection('categorias')
-			.get()
-			.then((documents) => {
-				let tempArray = [];
-				documents.forEach((doc) => {
-					tempArray.push(doc.id);
-				});
-				setCategorias((values) => [...values, ...tempArray]);
-			})
-			.catch((e) => {
-				console.log(e);
-			});
-	}, []);
-
-	useEffect(() => {
-		if (enviar) {
-			db.collection('categorias')
-				.doc(texto)
-				.get()
-				.then((doc) => {
-					console.log(doc);
-
-					if (doc.exists) {
-						console.log('la categoría existe');
-					} else {
-						console.log('la categoría no existe');
-						db.collection('categorias')
-							.doc(texto)
-							.set({ activa: true })
-							.then(() => {
-								console.log('la categoría se creo correctamente');
-								setCategorias((values) => [...values, texto]);
-							})
-							.catch((e) => {
-								console.log(e);
-							});
-					}
-				})
-				.catch((e) => {
-					console.log(e);
-				})
-				.finally(() => {
-					setTexto('');
-					setEnviar(false);
-				});
-		}
-	}, [enviar]);
 	return (
 		<div>
-			Lista de categorias:
-			{categorias.map((categoria) => (
-				<div key={categoria}>{categoria} </div>
-			))}
-			<br />
 			Agregar nueva categoría:
 			<input
 				type="text"
@@ -70,8 +16,9 @@ const Categorias = (props) => {
 				}}
 			/>
 			<button
+				type="button"
 				onClick={() => {
-					setEnviar(true);
+					crearNuevaCategoria(texto);
 				}}
 			>
 				Enviar
@@ -79,4 +26,13 @@ const Categorias = (props) => {
 		</div>
 	);
 };
-export default Categorias;
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		crearNuevaCategoria: (texto) => {
+			dispatch(ACTION_CREAR_NUEVA_CATEGORIA(texto));
+		},
+	};
+};
+
+export default connect(null, mapDispatchToProps)(Categorias);

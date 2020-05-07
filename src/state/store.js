@@ -51,7 +51,13 @@ const reducerCategorias = (state = { servidor: [], lista: [] }, action) => {
 				}),
 			};
 			return tempState;
-
+		case 'AGREGAR_NUEVA_CATEGORIA':
+			tempState = {
+				...tempState,
+				servidor: [...tempState.servidor, action.payload],
+				lista: [...tempState.lista, { nombre: action.payload, activa: false }],
+			};
+			return tempState;
 		default:
 			return state;
 	}

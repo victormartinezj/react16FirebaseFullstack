@@ -1,6 +1,38 @@
 import { db, auth, fs } from '../firebase';
 import slugify from 'react-slugify';
 
+export const ACTION_CREAR_NUEVA_CATEGORIA = (texto) => (dispatch, getState) => {
+	try {
+		db.collection('categorias')
+			.doc(texto)
+			.get()
+			.then((doc) => {
+				console.log(doc);
+
+				if (doc.exists) {
+					console.log('la categoría existe');
+				} else {
+					console.log('la categoría no existe');
+					db.collection('categorias')
+						.doc(texto)
+						.set({ activa: true })
+						.then(() => {
+							console.log('la categoría se creo correctamente');
+							dispatch({ type: 'AGREGAR_NUEVA_CATEGORIA', payload: texto });
+						})
+						.catch((e) => {
+							console.log(e);
+						});
+				}
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
 	try {
 		const miBatch = db.batch();
