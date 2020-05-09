@@ -3,19 +3,25 @@ import slugify from 'react-slugify';
 
 export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
 	try {
+		dispatch({ type: 'CARGA_INICIAL_COMENTARIOS' });
 		db.collection('completos')
 			.doc(slug)
 			.collection('comentarios')
 			.get()
 			.then((querySnapshot) => {
+				let tempArray = [];
 				querySnapshot.forEach((doc) => {
+					tempArray = tempArray.concat([{ id: doc.id, data: doc.data() }]);
 					console.log(doc.id);
 				});
+				dispatch({ type: 'CARGA_CORRECTA_COMENTARIOS', payload: tempArray });
 			})
 			.catch((e) => {
 				console.log(e);
+				dispatch({ type: 'ERROR_CARGA_COMENTARIOS' });
 			});
 	} catch (error) {
+		dispatch({ type: 'ERROR_CARGA_COMENTARIOS' });
 		console.log(error);
 	}
 };

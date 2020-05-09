@@ -1,6 +1,31 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+const reducerComentarios = (
+	state = { visible: false, cargando: false, error: false, comentarios: [] },
+	action
+) => {
+	let tempState = { ...state };
+	switch (action.type) {
+		case 'CARGA_INICIAL_COMENTARIOS':
+			tempState = { ...tempState, visible: true, cargando: true };
+
+			return tempState;
+		case 'ERROR_CARGA_COMENTARIOS':
+			tempState = { ...tempState, error: true, cargando: false };
+			return tempState;
+		case 'CARGA_CORRECTA_COMENTARIOS':
+			tempState = {
+				...tempState,
+				cargando: false,
+				comentarios: action.payload,
+			};
+			return tempState;
+		default:
+			return state;
+	}
+};
+
 const reducerUsuario = (state = { usuario: null }, action) => {
 	let tempState = { ...state };
 	switch (action.type) {
@@ -134,6 +159,7 @@ const root = combineReducers({
 	post: reducerPost,
 	categorias: reducerCategorias,
 	usuario: reducerUsuario,
+	comentarios: reducerComentarios,
 });
 let store = createStore(root, applyMiddleware(thunk));
 

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ACTION_CARGAR_POST, ACTION_CARGAR_COMENTARIOS } from './state/actions';
 import EditorPost from './EditorPost';
+import Comentarios from './Comentarios';
 
 const Post = ({ post, solicitarPost, limpiarPost, cargarComentarios }) => {
 	console.log(useParams());
@@ -25,16 +26,7 @@ const Post = ({ post, solicitarPost, limpiarPost, cargarComentarios }) => {
 						<div>
 							<div>{post.post.data.titulo}</div>
 							<EditorPost data={post.post.data.cuerpo} />
-							<div>
-								Comentarios
-								<button
-									onClick={() => {
-										cargarComentarios(slug);
-									}}
-								>
-									Cargar comentarios
-								</button>
-							</div>
+							<Comentarios slug={slug} />
 						</div>
 					)}
 				</div>
