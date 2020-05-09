@@ -6,7 +6,24 @@ const Comentarios = ({ slug, cargarComentarios, informacion }) => (
 	<div>
 		Comentarios
 		{informacion.visible ? (
-			<div> Comentarios</div>
+			<div>
+				{' '}
+				{informacion.cargando ? (
+					<p>Cargando...</p>
+				) : (
+					<div>
+						{informacion.error ? (
+							<p>Error al cargar los comentarios</p>
+						) : (
+							<div>
+								{informacion.comentarios.map((com) => (
+									<p key={com.id}>{com.id}</p>
+								))}
+							</div>
+						)}
+					</div>
+				)}
+			</div>
 		) : (
 			<button
 				onClick={() => {

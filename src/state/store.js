@@ -21,6 +21,14 @@ const reducerComentarios = (
 				comentarios: action.payload,
 			};
 			return tempState;
+		case 'LIMPIAR_POST':
+			tempState = {
+				visible: false,
+				cargando: false,
+				error: false,
+				comentarios: [],
+			};
+			return tempState;
 		default:
 			return state;
 	}
