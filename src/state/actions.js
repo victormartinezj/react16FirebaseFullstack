@@ -1,6 +1,25 @@
 import { db, auth, fs } from '../firebase';
 import slugify from 'react-slugify';
 
+export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
+	try {
+		db.collection('completos')
+			.doc(slug)
+			.collection('comentarios')
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					console.log(doc.id);
+				});
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const ACTION_CREAR_NUEVA_CATEGORIA = (texto) => (dispatch, getState) => {
 	try {
 		db.collection('categorias')
