@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ACTION_CARGAR_COMENTARIOS } from './state/actions';
+import FormaComentarios from './formas/FormaComentarios';
 
 const Comentarios = ({ slug, cargarComentarios, informacion }) => (
 	<div>
@@ -19,6 +20,7 @@ const Comentarios = ({ slug, cargarComentarios, informacion }) => (
 								{informacion.comentarios.map((com) => (
 									<p key={com.id}>{com.id}</p>
 								))}
+								<FormaComentarios slug={slug} />
 							</div>
 						)}
 					</div>

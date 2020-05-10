@@ -1,6 +1,33 @@
 import { db, auth, fs } from '../firebase';
 import slugify from 'react-slugify';
 
+export const ACTION_AGREGAR_COMENTARIO = ({
+	slug,
+	autor,
+	autorId,
+	comentario,
+}) => (dispatch, getState) => {
+	try {
+		db.collection('completos')
+			.doc(slug)
+			.collection('comentarios')
+			.add({
+				autor: autor,
+				autorId: autorId,
+				comentario: comentario,
+				fecha: fs.Timestamp.now(),
+			})
+			.then(() => {
+				console.log('El comentario se agregó correctamente');
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
 	try {
 		dispatch({ type: 'CARGA_INICIAL_COMENTARIOS' });
