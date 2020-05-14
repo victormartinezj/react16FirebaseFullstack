@@ -1,38 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
 
 const SeleccionarCategorias = ({ categorias, activar, desactivar }) => (
-	<div>
-		Categorias seleccionadas:{' '}
-		{categorias
-			.filter((cat) => cat.activa)
-			.map((cat) => {
-				return (
-					<button
-						key={cat.nombre}
-						onClick={() => {
-							desactivar(cat.nombre);
-						}}
-					>
-						{cat.nombre}
-					</button>
-				);
-			})}
-		Lista de categorias:{' '}
-		{categorias
-			.filter((cat) => !cat.activa)
-			.map((cat) => {
-				return (
-					<button
-						key={cat.nombre}
-						onClick={() => {
-							activar(cat.nombre);
-						}}
-					>
-						{cat.nombre}
-					</button>
-				);
-			})}
+	<div className="mb-5">
+		<ButtonToolbar>
+			<ButtonGroup>
+				{categorias
+					.filter((cat) => cat.activa)
+					.map((cat) => {
+						return (
+							<Button
+								variant="outline-primary"
+								key={cat.nombre}
+								onClick={() => {
+									desactivar(cat.nombre);
+								}}
+							>
+								{cat.nombre}
+							</Button>
+						);
+					})}
+			</ButtonGroup>
+
+			<ButtonGroup>
+				{categorias
+					.filter((cat) => !cat.activa)
+					.map((cat) => {
+						return (
+							<Button
+								key={cat.nombre}
+								onClick={() => {
+									activar(cat.nombre);
+								}}
+							>
+								{cat.nombre}
+							</Button>
+						);
+					})}
+			</ButtonGroup>
+		</ButtonToolbar>
 	</div>
 );
 

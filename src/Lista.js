@@ -31,7 +31,6 @@ const Lista = ({ stateLista, comenzar, mas, categorias, limpiar }) => {
 					<Spinner animation="border" />
 				) : (
 					<div>
-						Lista:
 						<SeleccionarCategorias />
 						<ListGroup>
 							{stateLista.posts.map(({ id, titulo }) => (
