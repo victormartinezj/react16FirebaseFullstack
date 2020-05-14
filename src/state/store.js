@@ -135,6 +135,15 @@ const reducerLista = (
 		case 'LISTA_CARGANDO_MAS':
 			tempState.cargando = true;
 			return tempState;
+		case 'LIMPIAR_LISTA_AL_DESMONTAR':
+			tempState = {
+				posts: [],
+				ultimo: null,
+				cargando: false,
+				total: false,
+				comenzar: true,
+			};
+			return tempState;
 
 		default:
 			return state;
