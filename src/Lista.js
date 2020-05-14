@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { ACTION_LISTA_INICIAR, ACTION_LISTA_MAS_POSTS } from './state/actions';
 import SeleccionarCategorias from './SeleccionarCategorias';
 import { Link } from 'react-router-dom';
+import { Jumbotron, Container } from 'react-bootstrap';
 
 const Lista = ({ stateLista, comenzar, mas, categorias }) => {
 	useEffect(() => {
@@ -11,6 +12,12 @@ const Lista = ({ stateLista, comenzar, mas, categorias }) => {
 
 	return (
 		<div>
+			<Jumbotron fluid>
+				<Container className="text-center">
+					<h1>Blog</h1>
+					<p>Sobre programación, Js, React, Angular</p>
+				</Container>
+			</Jumbotron>
 			{stateLista.comenzar ? (
 				<p>Cargando...</p>
 			) : (

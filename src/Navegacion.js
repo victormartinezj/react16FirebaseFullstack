@@ -1,21 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from './firebase';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 
 const Navegacion = ({ usuario }) => (
 	<div>
-		<ul>
-			<li>
-				<Link to="/">home</Link>
-			</li>
+		<Navbar bg="primary" variant="dark">
+			<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+			<Nav className="ml-auto">
+				<Nav.Link as={Link} to="/">
+					Home
+				</Nav.Link>
 
-			{usuario ? (
-				<>
-					<li>
-						<Link to="/publicacion">publicacion</Link>
-					</li>
-					<li>
-						<button
+				{usuario ? (
+					<>
+						<Nav.Link as={Link} to="/publicacion">
+							Publicacion
+						</Nav.Link>
+						<Nav.Link
+							as={Button}
 							onClick={() => {
 								auth.signOut().catch((e) => {
 									console.log(e);
@@ -23,20 +26,20 @@ const Navegacion = ({ usuario }) => (
 							}}
 						>
 							Logout
-						</button>
-					</li>
-				</>
-			) : (
-				<>
-					<li>
-						<Link to="/signup">signup</Link>
-					</li>
-					<li>
-						<Link to="/login">login</Link>
-					</li>
-				</>
-			)}
-		</ul>
+						</Nav.Link>
+					</>
+				) : (
+					<>
+						<Nav.Link as={Link} to="/signup">
+							SignUp
+						</Nav.Link>
+						<Nav.Link as={Link} to="/login">
+							LogIn
+						</Nav.Link>
+					</>
+				)}
+			</Nav>
+		</Navbar>
 	</div>
 );
 export default Navegacion;
