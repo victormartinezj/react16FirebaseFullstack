@@ -1,14 +1,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { connect } from 'react-redux';
+import { ACTION_LOGIN_USUARIO } from '../state/actions';
 
-const FormaLogIn = (props) => {
-	const { register, handleSubmit, errors, watch } = useForm();
+const FormaLogIn = ({ login }) => {
+	const { register, handleSubmit, errors } = useForm();
 
 	return (
 		<div>
 			<form
 				onSubmit={handleSubmit((values) => {
 					console.log(values);
+					login(values);
 				})}
 			>
 				<label>Correo</label>
@@ -48,4 +51,13 @@ const FormaLogIn = (props) => {
 		</div>
 	);
 };
-export default FormaLogIn;
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		login: (values) => {
+			dispatch(ACTION_LOGIN_USUARIO(values));
+		},
+	};
+};
+
+export default connect(null, mapDispatchToProps)(FormaLogIn);

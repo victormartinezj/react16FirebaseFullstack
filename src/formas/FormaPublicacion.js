@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from './Editor';
-import { db, fs } from '../firebase';
+import { db } from '../firebase';
 import slugify from 'react-slugify';
+import { connect } from 'react-redux';
+import { ACTION_CREAR_NUEVO_POST } from '../state/actions';
+import Categorias from '../Categorias';
 
-const FormaPublicacion = (props) => {
+const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 	const {
 		register,
 		handleSubmit,
@@ -13,55 +16,16 @@ const FormaPublicacion = (props) => {
 		triggerValidation,
 	} = useForm();
 
-	const [enviar, setEnviar] = useState(false);
-	const [values, setValues] = useState(null);
-	const [categorias, setCategorias] = useState([
-		{ nombre: 'react', activa: false },
-		{ nombre: 'angular', activa: false },
-		{ nombre: 'django', activa: false },
-		{ nombre: 'vue', activa: false },
-		{ nombre: 'rails', activa: false },
-		{ nombre: 'node', activa: false },
-		{ nombre: 'ruby', activa: false },
-		{ nombre: 'js', activa: false },
-		{ nombre: 'python', activa: false },
-	]);
+	const [categorias, setCategorias] = useState([]);
 
 	useEffect(() => {
-		if (enviar) {
-			const miBatch = db.batch();
-			const miSlug = slugify(values.slug);
-			const fechaCreacion = fs.Timestamp.now();
-
-			const slugs = db.collection('slugs').doc(miSlug);
-			miBatch.set(slugs, { activo: true });
-			const posts = db.collection('posts').doc(miSlug);
-			miBatch.set(posts, {
-				titulo: values.titulo,
-				resumen: values.resumen,
-				categorias: values.categorias,
-				creacion: fechaCreacion,
+		setCategorias(() => {
+			return categoriasServidor.map((cat) => {
+				return { nombre: cat, activa: false };
 			});
-			const completos = db.collection('completos').doc(miSlug);
-			miBatch.set(completos, {
-				titulo: values.titulo,
-				cuerpo: values.cuerpo,
-				categorias: values.categorias,
-				creacion: fechaCreacion,
-			});
+		});
+	}, [categoriasServidor]);
 
-			miBatch
-				.commit()
-				.then(() => {
-					console.log('El batch fue correcto');
-					setEnviar(false);
-				})
-				.catch((e) => {
-					setEnviar(false);
-					console.log(e);
-				});
-		}
-	}, [enviar]);
 	useEffect(() => {
 		let seleccion = [];
 		categorias.forEach(({ nombre, activa }) => {
@@ -89,9 +53,10 @@ const FormaPublicacion = (props) => {
 		<div>
 			<form
 				onSubmit={handleSubmit((values) => {
-					setValues(values);
-					setEnviar(true);
-					console.log(values);
+					nuevaPublicacion({
+						...values,
+						usuario: { nombre: autor.displayName, id: autor.uid },
+					});
 				})}
 			>
 				<label htmlFor="titulo">Título</label>
@@ -157,19 +122,6 @@ const FormaPublicacion = (props) => {
 							} catch (e) {
 								console.log(e);
 							}
-							// db.collection('slugs')
-							// 	.doc(value)
-							// 	.get()
-							// 	.then((doc) => {
-							// 		if (doc.exists) {
-							// 			console.log('El slug ya existe');
-							// 		} else {
-							// 			console.log('realizar lógica');
-							// 		}
-							// 	})
-							// 	.catch((e) => {
-							// 		console.log(e);
-							// 	});
 						},
 					})}
 				/>
@@ -231,6 +183,8 @@ const FormaPublicacion = (props) => {
 					}
 				})}
 				<br />
+				<Categorias />
+				<br />
 
 				<label htmlFor="cuerpo">Cuerpo</label>
 				<Editor setValue={setValue} />
@@ -242,4 +196,20 @@ const FormaPublicacion = (props) => {
 		</div>
 	);
 };
-export default FormaPublicacion;
+
+const mapStateToProps = (state) => {
+	return {
+		categoriasServidor: state.categorias.servidor,
+		autor: state.usuario.usuario,
+	};
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		nuevaPublicacion: (values) => {
+			dispatch(ACTION_CREAR_NUEVO_POST(values));
+		},
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormaPublicacion);
