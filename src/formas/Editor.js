@@ -43,6 +43,7 @@ let format = [
 	'image',
 	'video',
 	'link',
+	'background',
 ];
 
 const miModulo = {

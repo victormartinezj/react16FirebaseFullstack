@@ -17,6 +17,7 @@ const Categorias = ({ crearNuevaCategoria }) => {
 				}}
 			/>
 			<Button
+				variant="light"
 				className="my-1"
 				block
 				type="button"
@@ -24,7 +25,7 @@ const Categorias = ({ crearNuevaCategoria }) => {
 					crearNuevaCategoria(texto);
 				}}
 			>
-				Enviar
+				Agregar
 			</Button>
 		</Form.Group>
 	);

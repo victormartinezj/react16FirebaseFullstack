@@ -67,7 +67,7 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 		<div>
 			<Container>
 				<Form
-					className="mt-5"
+					className="my-5"
 					onSubmit={handleSubmit((values) => {
 						nuevaPublicacion({
 							...values,
@@ -213,7 +213,9 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 
 					<br />
 					{errors.cuerpo && <p>{errors.cuerpo.message}</p>}
-					<input type="submit" value="Submit" />
+					<Button block type="submit">
+						Enviar
+					</Button>
 				</Form>
 			</Container>
 		</div>
