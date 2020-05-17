@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { ACTION_CARGAR_POST, ACTION_CARGAR_COMENTARIOS } from './state/actions';
 import EditorPost from './EditorPost';
 import Comentarios from './Comentarios';
+import { Spinner, Jumbotron, Container, Alert } from 'react-bootstrap';
 
 const Post = ({ post, solicitarPost, limpiarPost, cargarComentarios }) => {
 	console.log(useParams());
@@ -15,18 +16,26 @@ const Post = ({ post, solicitarPost, limpiarPost, cargarComentarios }) => {
 
 	return (
 		<div>
-			Post
 			{post.cargando ? (
-				<p>Cargando post..</p>
+				<div className="text-center mt-5">
+					<Spinner animation="border" />
+					<p>Cargando post..</p>
+				</div>
 			) : (
 				<div>
 					{post.error ? (
-						<p>Error al cargar el post</p>
+						<Alert className="mt-5" variant="danger">
+							Error al cargar el post
+						</Alert>
 					) : (
 						<div>
-							<div>{post.post.data.titulo}</div>
-							<EditorPost data={post.post.data.cuerpo} />
-							<Comentarios slug={slug} />
+							<Jumbotron className="text-center">
+								<h2>{post.post.data.titulo}</h2>
+							</Jumbotron>
+							<Container className="mb-5">
+								<EditorPost data={post.post.data.cuerpo} />
+								<Comentarios slug={slug} />
+							</Container>
 						</div>
 					)}
 				</div>
