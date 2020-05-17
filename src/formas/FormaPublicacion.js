@@ -6,7 +6,14 @@ import slugify from 'react-slugify';
 import { connect } from 'react-redux';
 import { ACTION_CREAR_NUEVO_POST } from '../state/actions';
 import Categorias from '../Categorias';
-import { Form, Container, Alert } from 'react-bootstrap';
+import {
+	Form,
+	Container,
+	Alert,
+	ButtonGroup,
+	ButtonToolbar,
+	Button,
+} from 'react-bootstrap';
 
 const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 	const {
@@ -18,6 +25,10 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 	} = useForm();
 
 	const [categorias, setCategorias] = useState([]);
+	const [
+		realizarValidacionCategoria,
+		setRealizarValidacionCategoria,
+	] = useState(false);
 
 	useEffect(() => {
 		setCategorias(() => {
@@ -35,7 +46,9 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 			}
 		});
 		setValue('categorias', seleccion);
-		triggerValidation('categorias');
+		if (realizarValidacionCategoria) {
+			triggerValidation('categorias');
+		}
 	}, [categorias]);
 
 	useEffect(() => {
@@ -141,62 +154,57 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 							</Alert>
 						)}
 					</Form.Group>
-					<br />
-					<h5>Las categorias seleccionadas son:</h5>
-					{errors.categorias && <p>{errors.categorias.message}</p>}
-					{categorias.map(({ nombre, activa }, index) => {
-						if (activa) {
-							return (
-								<div key={`seleccionada${nombre}`}>
-									<h5>{nombre}</h5>
-									<button
-										onClick={() => {
-											let tempArr = [...categorias];
-											tempArr[index] = { nombre, activa: false };
-											setCategorias(tempArr);
-										}}
-									>
-										cancelar
-									</button>
-								</div>
-							);
-						}
-					})}
-					<br />
-					<h5>Categorias:</h5>
-					{categorias.map(({ nombre, activa }, index) => {
-						if (activa) {
-							return (
-								<button
-									disabled
-									type="button"
-									key={nombre}
-									onClick={() => {
-										let tempArr = [...categorias];
-										tempArr[index] = { nombre, activa: true };
-										setCategorias(tempArr);
-									}}
-								>
-									{nombre}
-								</button>
-							);
-						} else {
-							return (
-								<button
-									type="button"
-									key={nombre}
-									onClick={() => {
-										const tempArr = [...categorias];
-										tempArr[index] = { nombre, activa: true };
-										setCategorias(tempArr);
-									}}
-								>
-									{nombre}
-								</button>
-							);
-						}
-					})}
-					<br />
+					<Form.Label>Categorias:</Form.Label>
+					<ButtonToolbar>
+						<ButtonGroup>
+							<h5>Las categorias seleccionadas son:</h5>
+							{categorias.map(({ nombre, activa }, index) => {
+								if (activa) {
+									return (
+										<Button
+											variant="outline-primary"
+											key={`seleccionada${nombre}`}
+											onClick={() => {
+												let tempArr = [...categorias];
+												tempArr[index] = { nombre, activa: false };
+												setCategorias(tempArr);
+											}}
+										>
+											{nombre}
+										</Button>
+									);
+								}
+							})}
+						</ButtonGroup>
+						<ButtonGroup>
+							{categorias.map(({ nombre, activa }, index) => {
+								if (activa) {
+									return null;
+								} else {
+									return (
+										<Button
+											type="button"
+											key={nombre}
+											onClick={() => {
+												setRealizarValidacionCategoria(true);
+												const tempArr = [...categorias];
+												tempArr[index] = { nombre, activa: true };
+												setCategorias(tempArr);
+											}}
+										>
+											{nombre}
+										</Button>
+									);
+								}
+							})}
+						</ButtonGroup>
+					</ButtonToolbar>
+					{errors.categorias && (
+						<Alert className="my-1" variant="danger">
+							{errors.categorias.message}
+						</Alert>
+					)}
+
 					<Categorias />
 					<br />
 

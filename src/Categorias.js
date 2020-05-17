@@ -1,29 +1,32 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ACTION_CREAR_NUEVA_CATEGORIA } from './state/actions';
+import { Form, Button } from 'react-bootstrap';
 
 const Categorias = ({ crearNuevaCategoria }) => {
 	const [texto, setTexto] = useState('');
 
 	return (
-		<div>
-			Agregar nueva categoría:
-			<input
+		<Form.Group controlId="nuevaCategoria">
+			<Form.Label>Agregar nueva categoría:</Form.Label>
+			<Form.Control
 				type="text"
 				value={texto}
 				onChange={(e) => {
 					setTexto(e.target.value);
 				}}
 			/>
-			<button
+			<Button
+				className="my-1"
+				block
 				type="button"
 				onClick={() => {
 					crearNuevaCategoria(texto);
 				}}
 			>
 				Enviar
-			</button>
-		</div>
+			</Button>
+		</Form.Group>
 	);
 };
 
