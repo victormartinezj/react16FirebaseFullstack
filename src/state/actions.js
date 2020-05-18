@@ -38,8 +38,13 @@ export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
 			.then((querySnapshot) => {
 				let tempArray = [];
 				querySnapshot.forEach((doc) => {
-					tempArray = tempArray.concat([{ id: doc.id, data: doc.data() }]);
+					let tempData = doc.data();
+					tempData.fecha = new Date(doc.data().fecha.toDate()).toLocaleString(
+						'es-MX'
+					);
+					tempArray = tempArray.concat([{ id: doc.id, data: tempData }]);
 					console.log(doc.id);
+					console.log(doc.data());
 				});
 				dispatch({ type: 'CARGA_CORRECTA_COMENTARIOS', payload: tempArray });
 			})
