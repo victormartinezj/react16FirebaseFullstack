@@ -2,38 +2,54 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ACTION_CARGAR_COMENTARIOS } from './state/actions';
 import FormaComentarios from './formas/FormaComentarios';
+import { Alert, Spinner, ListGroup, Card, Button } from 'react-bootstrap';
 
 const Comentarios = ({ slug, cargarComentarios, informacion }) => (
 	<div>
-		Comentarios
+		<Alert variant="dark">Comentarios</Alert>
 		{informacion.visible ? (
 			<div>
 				{' '}
 				{informacion.cargando ? (
-					<p>Cargando...</p>
+					<div>
+						<Spinner animation="border" />
+
+						<p>Cargando...</p>
+					</div>
 				) : (
 					<div>
 						{informacion.error ? (
-							<p>Error al cargar los comentarios</p>
+							<Alert variant="danger">Error al cargar los comentarios</Alert>
 						) : (
-							<div>
+							<ListGroup variant="flush">
 								{informacion.comentarios.map((com) => (
-									<p key={com.id}>{com.id}</p>
+									<ListGroup.Item key={com.id}>
+										<Card.Body>
+											<Card.Title>
+												{com.data.autor}
+												<p>
+													<small>{com.data.fecha}</small>
+												</p>
+											</Card.Title>
+											<Card.Text>{com.data.comentario}</Card.Text>
+										</Card.Body>
+									</ListGroup.Item>
 								))}
 								<FormaComentarios slug={slug} />
-							</div>
+							</ListGroup>
 						)}
 					</div>
 				)}
 			</div>
 		) : (
-			<button
+			<Button
+				block
 				onClick={() => {
 					cargarComentarios(slug);
 				}}
 			>
 				Cargar comentarios
-			</button>
+			</Button>
 		)}
 	</div>
 );

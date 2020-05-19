@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { ACTION_AGREGAR_COMENTARIO } from '../state/actions';
+import { Form, Button } from 'react-bootstrap';
 
 const FormaComentarios = ({ slug, usuario, agregarComentario }) => {
 	const { handleSubmit, errors, register } = useForm();
@@ -9,7 +10,7 @@ const FormaComentarios = ({ slug, usuario, agregarComentario }) => {
 	return (
 		<div>
 			{usuario.usuario ? (
-				<form
+				<Form
 					onSubmit={handleSubmit((values) => {
 						console.log(values);
 						const tempValues = {
@@ -21,9 +22,17 @@ const FormaComentarios = ({ slug, usuario, agregarComentario }) => {
 						agregarComentario(tempValues);
 					})}
 				>
-					<input name="comentario" ref={register({ required: true })} />
-					<input type="submit" />
-				</form>
+					<Form.Group controlId="nuevoComentario">
+						<Form.Label> Nuevo comentario </Form.Label>
+						<Form.Control
+							name="comentario"
+							ref={register({ required: true })}
+						/>
+					</Form.Group>
+					<Button block type="submit">
+						Enviar nuevo comentario
+					</Button>
+				</Form>
 			) : (
 				<p>Necesitas registrarte para poder comentar</p>
 			)}
