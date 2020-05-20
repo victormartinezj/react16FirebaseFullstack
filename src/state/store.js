@@ -34,7 +34,7 @@ const reducerComentarios = (
 	}
 };
 
-const reducerUsuario = (state = { usuario: null }, action) => {
+const reducerUsuario = (state = { usuario: null, admin: false }, action) => {
 	let tempState = { ...state };
 	switch (action.type) {
 		case 'ESTABLECER_USUARIO':
@@ -42,6 +42,10 @@ const reducerUsuario = (state = { usuario: null }, action) => {
 			return tempState;
 		case 'LIMPIAR_USUARIO':
 			tempState.usuario = null;
+			tempState.admin = false;
+			return tempState;
+		case 'ESTABLECER_ADMIN':
+			tempState.admin = true;
 			return tempState;
 
 		default:

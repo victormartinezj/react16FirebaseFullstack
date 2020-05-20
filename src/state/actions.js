@@ -1,6 +1,26 @@
 import { db, auth, fs } from '../firebase';
 import slugify from 'react-slugify';
 
+export const ACTION_ADMIN = (usuario) => (dispatch, getState) => {
+	try {
+		auth.currentUser
+			.getIdTokenResult()
+			.then((idTokenResult) => {
+				console.log(idTokenResult);
+				if (idTokenResult.claims.admin) {
+					dispatch({ type: 'ESTABLECER_ADMIN' });
+				}
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	} finally {
+		dispatch({ type: 'ESTABLECER_USUARIO', payload: usuario });
+	}
+};
+
 export const ACTION_AGREGAR_COMENTARIO = ({
 	slug,
 	autor,
