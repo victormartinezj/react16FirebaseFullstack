@@ -6,7 +6,9 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 const Navegacion = ({ usuario, admin }) => (
 	<div>
 		<Navbar bg="primary" variant="dark">
-			<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+			<Navbar.Brand as={Link} to="/">
+				Navbar
+			</Navbar.Brand>
 			<Nav className="ml-auto">
 				<Nav.Link as={Link} to="/">
 					Home
