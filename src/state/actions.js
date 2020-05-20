@@ -28,6 +28,7 @@ export const ACTION_AGREGAR_COMENTARIO = ({
 	comentario,
 }) => (dispatch, getState) => {
 	try {
+		dispatch({ type: 'ENVIO_COMENTARIO_ACTIVO' });
 		db.collection('completos')
 			.doc(slug)
 			.collection('comentarios')
@@ -39,12 +40,15 @@ export const ACTION_AGREGAR_COMENTARIO = ({
 			})
 			.then(() => {
 				console.log('El comentario se agregó correctamente');
+				dispatch({ type: 'ENVIO_COMENTARIO_EXITO' });
 			})
 			.catch((e) => {
 				console.log(e);
+				dispatch({ type: 'ENVIO_COMENTARIO_ERROR' });
 			});
 	} catch (error) {
 		console.log(error);
+		dispatch({ type: 'ENVIO_COMENTARIO_ERROR' });
 	}
 };
 
@@ -54,6 +58,7 @@ export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
 		db.collection('completos')
 			.doc(slug)
 			.collection('comentarios')
+			.orderBy('fecha')
 			.get()
 			.then((querySnapshot) => {
 				let tempArray = [];

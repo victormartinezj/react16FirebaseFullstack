@@ -1,6 +1,29 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+const reducerEnvioComentarios = (
+	state = { activo: false, exito: false, error: false },
+	action
+) => {
+	let tempState = { ...state };
+	switch (action.type) {
+		case 'ENVIO_COMENTARIO_ACTIVO':
+			tempState.activo = true;
+			return tempState;
+		case 'ENVIO_COMENTARIO_EXITO':
+			tempState.activo = false;
+			tempState.exito = true;
+			return tempState;
+		case 'ENVIO_COMENTARIO_ERROR':
+			tempState.activo = false;
+			tempState.error = true;
+			return tempState;
+
+		default:
+			return state;
+	}
+};
+
 const reducerComentarios = (
 	state = { visible: false, cargando: false, error: false, comentarios: [] },
 	action
@@ -181,6 +204,7 @@ const root = combineReducers({
 	categorias: reducerCategorias,
 	usuario: reducerUsuario,
 	comentarios: reducerComentarios,
+	envioComentario: reducerEnvioComentarios,
 });
 let store = createStore(root, applyMiddleware(thunk));
 
