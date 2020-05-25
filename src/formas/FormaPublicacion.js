@@ -85,10 +85,6 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 									value: 10,
 									message: 'El mínimo de longitud es de 10 letras',
 								},
-								maxLength: {
-									value: 20,
-									message: 'El máximo de longitud es de 20 letras',
-								},
 							})}
 						/>
 						{errors.titulo && (
@@ -155,50 +151,47 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 						)}
 					</Form.Group>
 					<Form.Label>Categorias:</Form.Label>
-					<ButtonToolbar>
-						<ButtonGroup>
-							<h5>Las categorias seleccionadas son:</h5>
-							{categorias.map(({ nombre, activa }, index) => {
-								if (activa) {
-									return (
-										<Button
-											variant="outline-primary"
-											key={`seleccionada${nombre}`}
-											onClick={() => {
-												let tempArr = [...categorias];
-												tempArr[index] = { nombre, activa: false };
-												setCategorias(tempArr);
-											}}
-										>
-											{nombre}
-										</Button>
-									);
-								}
-							})}
-						</ButtonGroup>
-						<ButtonGroup>
-							{categorias.map(({ nombre, activa }, index) => {
-								if (activa) {
-									return null;
-								} else {
-									return (
-										<Button
-											type="button"
-											key={nombre}
-											onClick={() => {
-												setRealizarValidacionCategoria(true);
-												const tempArr = [...categorias];
-												tempArr[index] = { nombre, activa: true };
-												setCategorias(tempArr);
-											}}
-										>
-											{nombre}
-										</Button>
-									);
-								}
-							})}
-						</ButtonGroup>
-					</ButtonToolbar>
+
+					<h5>Las categorias seleccionadas son:</h5>
+					{categorias.map(({ nombre, activa }, index) => {
+						if (activa) {
+							return (
+								<Button
+									variant="outline-primary"
+									key={`seleccionada${nombre}`}
+									onClick={() => {
+										let tempArr = [...categorias];
+										tempArr[index] = { nombre, activa: false };
+										setCategorias(tempArr);
+									}}
+								>
+									{nombre}
+								</Button>
+							);
+						}
+					})}
+
+					{categorias.map(({ nombre, activa }, index) => {
+						if (activa) {
+							return null;
+						} else {
+							return (
+								<Button
+									type="button"
+									key={nombre}
+									onClick={() => {
+										setRealizarValidacionCategoria(true);
+										const tempArr = [...categorias];
+										tempArr[index] = { nombre, activa: true };
+										setCategorias(tempArr);
+									}}
+								>
+									{nombre}
+								</Button>
+							);
+						}
+					})}
+
 					{errors.categorias && (
 						<Alert className="my-1" variant="danger">
 							{errors.categorias.message}

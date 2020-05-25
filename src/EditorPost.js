@@ -21,6 +21,7 @@ let formats = [
 	'image',
 	'video',
 	'link',
+	'background',
 ];
 
 const EditorPost = ({ data }) => {
