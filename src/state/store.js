@@ -18,6 +18,9 @@ const reducerEnvioComentarios = (
 			tempState.activo = false;
 			tempState.error = true;
 			return tempState;
+		case 'LIMPIAR_POST':
+			tempState = { activo: false, exito: false, error: false };
+			return tempState;
 
 		default:
 			return state;
