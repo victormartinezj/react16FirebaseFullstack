@@ -6,16 +6,15 @@ import slugify from 'react-slugify';
 import { connect } from 'react-redux';
 import { ACTION_CREAR_NUEVO_POST } from '../state/actions';
 import Categorias from '../Categorias';
-import {
-	Form,
-	Container,
-	Alert,
-	ButtonGroup,
-	ButtonToolbar,
-	Button,
-} from 'react-bootstrap';
+import { Form, Container, Alert, Button, Spinner } from 'react-bootstrap';
 
-const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
+const FormaPublicacion = ({
+	categoriasServidor,
+	autor,
+	nuevaPublicacion,
+	estadoEnvio,
+	limpiarEstadoEnvio,
+}) => {
 	const {
 		register,
 		handleSubmit,
@@ -61,6 +60,9 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 			}
 		);
 		register({ name: 'cuerpo' });
+		return () => {
+			limpiarEstadoEnvio();
+		};
 	}, []);
 
 	return (
@@ -206,9 +208,24 @@ const FormaPublicacion = ({ categoriasServidor, autor, nuevaPublicacion }) => {
 
 					<br />
 					{errors.cuerpo && <p>{errors.cuerpo.message}</p>}
-					<Button block type="submit">
-						Enviar
-					</Button>
+					{estadoEnvio.error && (
+						<Alert variant="danger">Error en el envío intente otra vez</Alert>
+					)}
+					{estadoEnvio.exito ? (
+						<Alert variant="success">El envío fue correcto</Alert>
+					) : (
+						<>
+							{estadoEnvio.activo ? (
+								<Alert variant="info">
+									<Spinner animation="border" />
+								</Alert>
+							) : (
+								<Button block type="submit">
+									Enviar
+								</Button>
+							)}
+						</>
+					)}
 				</Form>
 			</Container>
 		</div>
@@ -219,6 +236,7 @@ const mapStateToProps = (state) => {
 	return {
 		categoriasServidor: state.categorias.servidor,
 		autor: state.usuario.usuario,
+		estadoEnvio: state.envioPublicacion,
 	};
 };
 
@@ -226,6 +244,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		nuevaPublicacion: (values) => {
 			dispatch(ACTION_CREAR_NUEVO_POST(values));
+		},
+		limpiarEstadoEnvio: () => {
+			dispatch({ type: 'LIMPIAR_PUBLICACION_POST' });
 		},
 	};
 };

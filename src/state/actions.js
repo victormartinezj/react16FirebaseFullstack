@@ -117,6 +117,7 @@ export const ACTION_CREAR_NUEVA_CATEGORIA = (texto) => (dispatch, getState) => {
 
 export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
 	try {
+		dispatch({ type: 'ENVIO_PUBLICACION_ACTIVO' });
 		const miBatch = db.batch();
 		const miSlug = slugify(values.slug);
 		const fechaCreacion = fs.Timestamp.now();
@@ -143,12 +144,15 @@ export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
 		miBatch
 			.commit()
 			.then(() => {
+				dispatch({ type: 'ENVIO_PUBLICACION_EXITO' });
 				console.log('El batch fue correcto');
 			})
 			.catch((e) => {
+				dispatch({ type: 'ENVIO_PUBLICACION_ERROR' });
 				console.log(e);
 			});
 	} catch (error) {
+		dispatch({ type: 'ENVIO_PUBLICACION_ERROR' });
 		console.log(error);
 	}
 };
