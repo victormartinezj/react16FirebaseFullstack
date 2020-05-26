@@ -29,6 +29,7 @@ const EditorPost = ({ data }) => {
 		theme: 'bubble',
 		formats,
 		readOnly: true,
+		modules: { syntax: true },
 	});
 
 	useEffect(() => {
