@@ -13,12 +13,18 @@ import FormaLogIn from './formas/FormaLogIn';
 import Lista from './Lista';
 import FormaPublicacion from './formas/FormaPublicacion';
 import { connect } from 'react-redux';
-import { ACTION_CATEGORIAS_CARGA } from './state/actions';
+import { ACTION_CATEGORIAS_CARGA, ACTION_ADMIN } from './state/actions';
 import Post from './Post';
 import Navegacion from './Navegacion';
 import { auth } from './firebase';
 
-function App({ cargarCategorias, cargarUsuario, usuario, limpiarUsuario }) {
+function App({
+	cargarCategorias,
+	cargarUsuario,
+	usuario,
+	limpiarUsuario,
+	admin,
+}) {
 	useEffect(() => {
 		cargarCategorias();
 	}, []);
@@ -37,16 +43,17 @@ function App({ cargarCategorias, cargarUsuario, usuario, limpiarUsuario }) {
 	return (
 		<div>
 			<Router>
-				<Navegacion usuario={usuario} />
+				<Navegacion usuario={usuario} admin={admin} />
 				{usuario ? (
 					<Switch>
 						<Route path="/" exact>
 							<Lista />
 						</Route>
-
-						<Route path="/publicacion">
-							<FormaPublicacion />
-						</Route>
+						{admin && (
+							<Route path="/publicacion">
+								<FormaPublicacion />
+							</Route>
+						)}
 						<Route path="/post/:slug">
 							<Post />
 						</Route>
@@ -78,6 +85,7 @@ function App({ cargarCategorias, cargarUsuario, usuario, limpiarUsuario }) {
 const mapStateToProps = (state) => {
 	return {
 		usuario: state.usuario.usuario,
+		admin: state.usuario.admin,
 	};
 };
 
@@ -87,7 +95,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(ACTION_CATEGORIAS_CARGA);
 		},
 		cargarUsuario: (usuario) => {
-			dispatch({ type: 'ESTABLECER_USUARIO', payload: usuario });
+			dispatch(ACTION_ADMIN(usuario));
 		},
 		limpiarUsuario: () => {
 			dispatch({ type: 'LIMPIAR_USUARIO' });

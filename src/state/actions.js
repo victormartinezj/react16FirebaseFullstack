@@ -1,6 +1,26 @@
 import { db, auth, fs } from '../firebase';
 import slugify from 'react-slugify';
 
+export const ACTION_ADMIN = (usuario) => (dispatch, getState) => {
+	try {
+		auth.currentUser
+			.getIdTokenResult()
+			.then((idTokenResult) => {
+				console.log(idTokenResult);
+				if (idTokenResult.claims.admin) {
+					dispatch({ type: 'ESTABLECER_ADMIN' });
+				}
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} catch (error) {
+		console.log(error);
+	} finally {
+		dispatch({ type: 'ESTABLECER_USUARIO', payload: usuario });
+	}
+};
+
 export const ACTION_AGREGAR_COMENTARIO = ({
 	slug,
 	autor,
@@ -8,6 +28,7 @@ export const ACTION_AGREGAR_COMENTARIO = ({
 	comentario,
 }) => (dispatch, getState) => {
 	try {
+		dispatch({ type: 'ENVIO_COMENTARIO_ACTIVO' });
 		db.collection('completos')
 			.doc(slug)
 			.collection('comentarios')
@@ -19,12 +40,15 @@ export const ACTION_AGREGAR_COMENTARIO = ({
 			})
 			.then(() => {
 				console.log('El comentario se agregó correctamente');
+				dispatch({ type: 'ENVIO_COMENTARIO_EXITO' });
 			})
 			.catch((e) => {
 				console.log(e);
+				dispatch({ type: 'ENVIO_COMENTARIO_ERROR' });
 			});
 	} catch (error) {
 		console.log(error);
+		dispatch({ type: 'ENVIO_COMENTARIO_ERROR' });
 	}
 };
 
@@ -34,6 +58,7 @@ export const ACTION_CARGAR_COMENTARIOS = (slug) => (dispatch, getState) => {
 		db.collection('completos')
 			.doc(slug)
 			.collection('comentarios')
+			.orderBy('fecha')
 			.get()
 			.then((querySnapshot) => {
 				let tempArray = [];
@@ -92,6 +117,7 @@ export const ACTION_CREAR_NUEVA_CATEGORIA = (texto) => (dispatch, getState) => {
 
 export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
 	try {
+		dispatch({ type: 'ENVIO_PUBLICACION_ACTIVO' });
 		const miBatch = db.batch();
 		const miSlug = slugify(values.slug);
 		const fechaCreacion = fs.Timestamp.now();
@@ -118,12 +144,15 @@ export const ACTION_CREAR_NUEVO_POST = (values) => (dispatch, getState) => {
 		miBatch
 			.commit()
 			.then(() => {
+				dispatch({ type: 'ENVIO_PUBLICACION_EXITO' });
 				console.log('El batch fue correcto');
 			})
 			.catch((e) => {
+				dispatch({ type: 'ENVIO_PUBLICACION_ERROR' });
 				console.log(e);
 			});
 	} catch (error) {
+		dispatch({ type: 'ENVIO_PUBLICACION_ERROR' });
 		console.log(error);
 	}
 };

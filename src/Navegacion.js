@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { auth } from './firebase';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 
-const Navegacion = ({ usuario }) => (
+const Navegacion = ({ usuario, admin }) => (
 	<div>
 		<Navbar bg="primary" variant="dark">
-			<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+			<Navbar.Brand as={Link} to="/">
+				Navbar
+			</Navbar.Brand>
 			<Nav className="ml-auto">
 				<Nav.Link as={Link} to="/">
 					Home
@@ -14,9 +16,11 @@ const Navegacion = ({ usuario }) => (
 
 				{usuario ? (
 					<>
-						<Nav.Link as={Link} to="/publicacion">
-							Publicacion
-						</Nav.Link>
+						{admin && (
+							<Nav.Link as={Link} to="/publicacion">
+								Publicacion
+							</Nav.Link>
+						)}
 						<Nav.Link
 							as={Button}
 							onClick={() => {

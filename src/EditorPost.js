@@ -21,6 +21,7 @@ let formats = [
 	'image',
 	'video',
 	'link',
+	'background',
 ];
 
 const EditorPost = ({ data }) => {
@@ -28,6 +29,7 @@ const EditorPost = ({ data }) => {
 		theme: 'bubble',
 		formats,
 		readOnly: true,
+		modules: { syntax: true },
 	});
 
 	useEffect(() => {

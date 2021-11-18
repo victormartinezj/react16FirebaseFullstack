@@ -48,6 +48,7 @@ let format = [
 
 const miModulo = {
 	toolbar: {
+		syntax: true,
 		container: toolbarOptions,
 		//   handlers: {
 		//     image: () => {

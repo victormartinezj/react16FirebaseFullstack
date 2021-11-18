@@ -4,42 +4,36 @@ import { ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
 
 const SeleccionarCategorias = ({ categorias, activar, desactivar }) => (
 	<div className="mb-5">
-		<ButtonToolbar>
-			<ButtonGroup>
-				{categorias
-					.filter((cat) => cat.activa)
-					.map((cat) => {
-						return (
-							<Button
-								variant="outline-primary"
-								key={cat.nombre}
-								onClick={() => {
-									desactivar(cat.nombre);
-								}}
-							>
-								{cat.nombre}
-							</Button>
-						);
-					})}
-			</ButtonGroup>
+		{categorias
+			.filter((cat) => cat.activa)
+			.map((cat) => {
+				return (
+					<Button
+						variant="outline-primary"
+						key={cat.nombre}
+						onClick={() => {
+							desactivar(cat.nombre);
+						}}
+					>
+						{cat.nombre}
+					</Button>
+				);
+			})}
 
-			<ButtonGroup>
-				{categorias
-					.filter((cat) => !cat.activa)
-					.map((cat) => {
-						return (
-							<Button
-								key={cat.nombre}
-								onClick={() => {
-									activar(cat.nombre);
-								}}
-							>
-								{cat.nombre}
-							</Button>
-						);
-					})}
-			</ButtonGroup>
-		</ButtonToolbar>
+		{categorias
+			.filter((cat) => !cat.activa)
+			.map((cat) => {
+				return (
+					<Button
+						key={cat.nombre}
+						onClick={() => {
+							activar(cat.nombre);
+						}}
+					>
+						{cat.nombre}
+					</Button>
+				);
+			})}
 	</div>
 );
 
